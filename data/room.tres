@@ -1,0 +1,406 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/limage/Limage.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+data = {
+"layers": [ {
+"blend_mode": "normal",
+"global_position": {
+"x": 400.0,
+"y": 300.0
+},
+"name": "bg",
+"opacity": 255,
+"origin": {
+"x": -400.0,
+"y": -300.0
+},
+"path": [ "bg" ],
+"scale": 1,
+"size": {
+"x": 800,
+"y": 600
+},
+"tags": {
+
+},
+"texture": "res://textures/room/bg.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 651.0,
+"y": 233.5
+},
+"name": "frame",
+"opacity": 255,
+"origin": {
+"x": -79.0,
+"y": -141.5
+},
+"path": [ "frame" ],
+"scale": 1,
+"size": {
+"x": 158,
+"y": 283
+},
+"tags": {
+
+},
+"texture": "res://textures/room/frame.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 658.5,
+"y": 363.5
+},
+"layers": [ {
+"blend_mode": "normal",
+"global_position": {
+"x": 648.0,
+"y": 236.0
+},
+"name": "normal",
+"opacity": 255,
+"origin": {
+"x": -72.0,
+"y": -136.0
+},
+"path": [ "door", "normal" ],
+"scale": 1,
+"size": {
+"x": 144,
+"y": 272
+},
+"tags": {
+
+},
+"texture": "res://textures/room/door-normal.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 608.5,
+"y": 267.0
+},
+"name": "pressed",
+"opacity": 255,
+"origin": {
+"x": -30.5,
+"y": -157.0
+},
+"path": [ "door", "pressed" ],
+"scale": 1,
+"size": {
+"x": 61,
+"y": 314
+},
+"tags": {
+
+},
+"texture": "res://textures/room/door-pressed.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 650.5,
+"y": 236.0
+},
+"name": "disabled",
+"opacity": 255,
+"origin": {
+"x": -74.5,
+"y": -136.0
+},
+"path": [ "door", "disabled" ],
+"scale": 1,
+"size": {
+"x": 149,
+"y": 272
+},
+"tags": {
+
+},
+"texture": "res://textures/room/door-disabled.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 643.5,
+"y": 246.5
+},
+"name": "hover",
+"opacity": 255,
+"origin": {
+"x": -67.5,
+"y": -137.5
+},
+"path": [ "door", "hover" ],
+"scale": 1,
+"size": {
+"x": 135,
+"y": 275
+},
+"tags": {
+
+},
+"texture": "res://textures/room/door-hover.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 651.5,
+"y": 237.5
+},
+"name": "mask",
+"opacity": 255,
+"origin": {
+"x": -75.5,
+"y": -141.5
+},
+"path": [ "door", "mask" ],
+"scale": 1.0,
+"size": {
+"x": 151.0,
+"y": 283.0
+},
+"tags": {
+"mask": true
+},
+"texture": "res://textures/room/door-mask.webp",
+"visible": false
+} ],
+"name": "door",
+"opacity": 255,
+"origin": {
+"x": -82.5,
+"y": -263.5
+},
+"path": [ "door" ],
+"size": {
+"x": 144,
+"y": 324
+},
+"tags": {
+"button": true
+},
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 144.5,
+"y": 152.0
+},
+"name": "vault",
+"opacity": 255,
+"origin": {
+"x": -40.5,
+"y": -42.0
+},
+"path": [ "vault" ],
+"scale": 1,
+"size": {
+"x": 81,
+"y": 84
+},
+"tags": {
+"button": true
+},
+"texture": "res://textures/room/vault.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 360.5,
+"y": 161.5
+},
+"name": "window_frame",
+"opacity": 255,
+"origin": {
+"x": -89.5,
+"y": -73.5
+},
+"path": [ "window_frame" ],
+"scale": 1,
+"size": {
+"x": 179,
+"y": 147
+},
+"tags": {
+
+},
+"texture": "res://textures/room/window_frame.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 365.0,
+"y": 435.0
+},
+"layers": [ {
+"blend_mode": "normal",
+"global_position": {
+"x": 257.0,
+"y": 323.0
+},
+"name": "window",
+"opacity": 255,
+"origin": {
+"x": -11.0,
+"y": -11.0
+},
+"path": [ "spawns", "window" ],
+"size": {
+"x": 22,
+"y": 22
+},
+"tags": {
+"point": true
+},
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 675.5,
+"y": 393.5
+},
+"name": "door",
+"opacity": 255,
+"origin": {
+"x": -11.5,
+"y": -11.5
+},
+"path": [ "spawns", "door" ],
+"size": {
+"x": 23,
+"y": 23
+},
+"tags": {
+"point": true
+},
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 54.5,
+"y": 546.5
+},
+"name": "player",
+"opacity": 255,
+"origin": {
+"x": -11.5,
+"y": -11.5
+},
+"path": [ "spawns", "player" ],
+"size": {
+"x": 23,
+"y": 23
+},
+"tags": {
+"point": true
+},
+"visible": true
+} ],
+"name": "spawns",
+"opacity": 255,
+"origin": {
+"x": -322.0,
+"y": -123.0
+},
+"path": [ "spawns" ],
+"size": {
+"x": 644,
+"y": 246
+},
+"tags": {
+
+},
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 211.5,
+"y": 87.5
+},
+"layers": [ {
+"blend_mode": "normal",
+"global_position": {
+"x": 137.5,
+"y": 150.0
+},
+"name": "pic2",
+"opacity": 255,
+"origin": {
+"x": -86.5,
+"y": -74.0
+},
+"path": [ "picture", "pic2" ],
+"scale": 1,
+"size": {
+"x": 173,
+"y": 148
+},
+"tags": {
+
+},
+"texture": "res://textures/room/picture-pic2.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 136.5,
+"y": 150.5
+},
+"name": "pic1",
+"opacity": 255,
+"origin": {
+"x": -83.5,
+"y": -70.5
+},
+"path": [ "picture", "pic1" ],
+"scale": 1,
+"size": {
+"x": 167,
+"y": 141
+},
+"tags": {
+
+},
+"texture": "res://textures/room/picture-pic1.webp",
+"visible": true
+} ],
+"name": "picture",
+"opacity": 255,
+"origin": {
+"x": -158.5,
+"y": -7.5
+},
+"path": [ "picture" ],
+"size": {
+"x": 167,
+"y": 141
+},
+"tags": {
+
+},
+"visible": true
+} ],
+"name": "room",
+"opacity": 255,
+"origin": {
+"x": 400.0,
+"y": 300.0
+},
+"path": [  ],
+"size": {
+"x": 800,
+"y": 600
+},
+"tags": {
+
+},
+"visible": true
+}

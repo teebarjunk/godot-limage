@@ -1,0 +1,93 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/limage/Limage.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+data = {
+"layers": [ {
+"blend_mode": "normal",
+"global_position": {
+"x": 479.0,
+"y": 317.0
+},
+"name": "arrow",
+"opacity": 255,
+"origin": {
+"x": -1.0,
+"y": -1.0
+},
+"path": [ "arrow" ],
+"scale": 1,
+"size": {
+"x": 44,
+"y": 42
+},
+"tags": {
+
+},
+"texture": "res://textures/cursor/arrow.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 391.5,
+"y": 307.5
+},
+"name": "finger",
+"opacity": 255,
+"origin": {
+"x": -12.5,
+"y": -3.5
+},
+"path": [ "finger" ],
+"scale": 1,
+"size": {
+"x": 35,
+"y": 60
+},
+"tags": {
+
+},
+"texture": "res://textures/cursor/finger.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 444.0,
+"y": 392.5
+},
+"name": "drag",
+"opacity": 255,
+"origin": {
+"x": -21.0,
+"y": -24.5
+},
+"path": [ "drag" ],
+"scale": 1,
+"size": {
+"x": 47,
+"y": 48
+},
+"tags": {
+
+},
+"texture": "res://textures/cursor/drag.webp",
+"visible": true
+} ],
+"name": "cursor",
+"opacity": 255,
+"origin": {
+"x": 400.0,
+"y": 300.0
+},
+"path": [  ],
+"size": {
+"x": 800,
+"y": 600
+},
+"tags": {
+
+},
+"visible": true
+}

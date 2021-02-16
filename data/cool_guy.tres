@@ -1,0 +1,389 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/limage/Limage.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+data = {
+"layers": [ {
+"blend_mode": "normal",
+"global_position": {
+"x": 2.5,
+"y": -159.0
+},
+"name": "base",
+"opacity": 255,
+"origin": {
+"x": -102.0,
+"y": -161.5
+},
+"path": [ "base" ],
+"scale": 1,
+"size": {
+"x": 204,
+"y": 323
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/base.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": -10.0,
+"y": -229.5
+},
+"layers": [ {
+"blend_mode": "normal",
+"global_position": {
+"x": -10.0,
+"y": -229.5
+},
+"name": "default",
+"opacity": 255,
+"origin": {
+"x": -43.5,
+"y": -28.0
+},
+"path": [ "expression", "default" ],
+"scale": 1,
+"size": {
+"x": 87,
+"y": 56
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/expression-default.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": -10.0,
+"y": -229.5
+},
+"name": "happy",
+"opacity": 255,
+"origin": {
+"x": -43.5,
+"y": -28.0
+},
+"path": [ "expression", "happy" ],
+"scale": 1,
+"size": {
+"x": 87,
+"y": 56
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/expression-happy.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": -10.0,
+"y": -222.5
+},
+"name": "sus",
+"opacity": 255,
+"origin": {
+"x": -43.5,
+"y": -20.0
+},
+"path": [ "expression", "sus" ],
+"scale": 1,
+"size": {
+"x": 87,
+"y": 40
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/expression-sus.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": -10.0,
+"y": -227.0
+},
+"name": "angry",
+"opacity": 255,
+"origin": {
+"x": -43.5,
+"y": -25.5
+},
+"path": [ "expression", "angry" ],
+"scale": 1,
+"size": {
+"x": 87,
+"y": 51
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/expression-angry.webp",
+"visible": false
+} ],
+"name": "expression",
+"opacity": 255,
+"origin": {
+"x": -43.5,
+"y": -28.0
+},
+"path": [ "expression" ],
+"size": {
+"x": 87,
+"y": 56
+},
+"tags": {
+"options": true
+},
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 3.0,
+"y": -116.0
+},
+"layers": [ {
+"blend_mode": "normal",
+"global_position": {
+"x": 2.5,
+"y": -125.5
+},
+"name": "white",
+"opacity": 255,
+"origin": {
+"x": -103.0,
+"y": -68.0
+},
+"path": [ "shirt", "white" ],
+"scale": 1,
+"size": {
+"x": 206,
+"y": 136
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/shirt-white.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 3.0,
+"y": -116.0
+},
+"name": "blue",
+"opacity": 255,
+"origin": {
+"x": -103.5,
+"y": -75.5
+},
+"path": [ "shirt", "blue" ],
+"scale": 1,
+"size": {
+"x": 207,
+"y": 151
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/shirt-blue.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 1.5,
+"y": -127.0
+},
+"name": "suit",
+"opacity": 255,
+"origin": {
+"x": -104.0,
+"y": -71.5
+},
+"path": [ "shirt", "suit" ],
+"scale": 1,
+"size": {
+"x": 208,
+"y": 143
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/shirt-suit.webp",
+"visible": false
+} ],
+"name": "shirt",
+"opacity": 255,
+"origin": {
+"x": -103.5,
+"y": -75.5
+},
+"path": [ "shirt" ],
+"size": {
+"x": 207,
+"y": 151
+},
+"tags": {
+"options": true
+},
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 43.0,
+"y": -301.5
+},
+"layers": [ {
+"blend_mode": "normal",
+"global_position": {
+"x": 10.0,
+"y": -231.0
+},
+"name": "sunglasses",
+"opacity": 255,
+"origin": {
+"x": -63.5,
+"y": -20.5
+},
+"path": [ "worn", "sunglasses" ],
+"scale": 1,
+"size": {
+"x": 127,
+"y": 41
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/worn-sunglasses.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 43.0,
+"y": -301.5
+},
+"name": "hat",
+"opacity": 255,
+"origin": {
+"x": -88.5,
+"y": -32.0
+},
+"path": [ "worn", "hat" ],
+"scale": 1,
+"size": {
+"x": 177,
+"y": 64
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/worn-hat.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 4.5,
+"y": -174.5
+},
+"name": "chain",
+"opacity": 255,
+"origin": {
+"x": -65.0,
+"y": -18.0
+},
+"path": [ "worn", "chain" ],
+"scale": 1,
+"size": {
+"x": 130,
+"y": 36
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/worn-chain.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 12.0,
+"y": -163.5
+},
+"name": "chain2",
+"opacity": 255,
+"origin": {
+"x": -68.5,
+"y": -30.0
+},
+"path": [ "worn", "chain2" ],
+"scale": 1,
+"size": {
+"x": 137,
+"y": 60
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/worn-chain2.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"global_position": {
+"x": 3.5,
+"y": -214.5
+},
+"name": "beard",
+"opacity": 255,
+"origin": {
+"x": -58.0,
+"y": -49.0
+},
+"path": [ "worn", "beard" ],
+"scale": 1,
+"size": {
+"x": 116,
+"y": 98
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/worn-beard.webp",
+"visible": false
+} ],
+"name": "worn",
+"opacity": 255,
+"origin": {
+"x": -88.5,
+"y": -32.0
+},
+"path": [ "worn" ],
+"size": {
+"x": 177,
+"y": 64
+},
+"tags": {
+"toggles": true
+},
+"visible": true
+} ],
+"name": "cool_guy",
+"opacity": 255,
+"origin": {
+"x": 400.0,
+"y": 300.0
+},
+"path": [  ],
+"size": {
+"x": 800,
+"y": 600
+},
+"tags": {
+
+},
+"visible": true
+}
