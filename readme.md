@@ -1,11 +1,11 @@
 
 # limage v0.1
 
-psd -> godot. you can delete everything outside the "addons" folder, but this project is not stable/tested enough yet.
-
 **WARNING: requires python to be installed**
 
-design in photoshop, krita, gimp, and anything else that can export .psd.
+psd (photoshop, krita, gimp...) -> godot.
+
+example included. you can delete everything outside the "addons" folder.
 
 ![layers1](./readme_images/layers1.png)
 
@@ -35,9 +35,9 @@ draw points to make spawning easier.
 - optionally merge layers at build time, so they can stay seperate in your psd.
 - only builds if there were changes.
 - helper scripts:
-	- button: pixel perfect sprite clicking, without a mask. (sprite can scale + rotate!)
-	- customizer: script generator for [customizable content](#customizer)
-	- cursorize: call *set_layer_as_cursor("layer_name")* to set any layer as the cursor. (will use origin to offset)
+	- button: pixel perfect sprite clicking, without a mask. (sprite can scale + rotate!).
+	- customizer: script generator for [customizable content](#customizer).
+	- cursorize: call *set_layer_as_cursor("layer_name")* to set any layer as the cursor. (will use origin to offset).
 - polygon generator (WIP! see [tags](#tags))
 
 
@@ -53,8 +53,8 @@ pip3 install psd-tools
 - create a **layered_images** folder in godot. *"res://layered_images"*.
 - add .psd files. (krita and gimp can export .psd)
 - activate the plugin. (*Project > Project Settings > Plugins > Limage*)
-- click **Limage** at top of screen (next to *2D, 3D, Script, Asset Lib*)
-- click **generate**
+- click **Limage** at top of screen. (next to *2D, 3D, Script, Asset Lib*)
+- click **generate**.
 - the textures will be placed in a *"textures"* folder, and the data in a *"data"* folder.
 
 
@@ -62,16 +62,17 @@ pip3 install psd-tools
 
 - create a scene in godot. (any node, but Node2D or Control are ideal.)
 - add **LimageNode.gd** script to it.
-- drag *"data/name-of-your-psd**.tres"*** into the **"limage"** field.
-- click the **"force_update"** toggle twice.
+- drag "*data/name-of-your-psd* **.tres**" into the "**limage**" field.
+- click the "**force_update**" toggle twice.
 
 that should work. you could remove the LimageNode.gd if you like.
 
 every time you double click **force_update** it will update. useful if you made changes. but it won't delete nodes. you can manually delete all the children to clear, and do a fresh generation.
 
+
 ## tags
 
-in your art program add tags between []: *"layer_name [tag_1 tag2 tag-3]"*
+in your art program add tags between []: "*layer_name [tag_1 tag2 tag-3]*"
 
 - **x**: completely ignore layer. (wont export image or layer info)
 - **visible**: will make layer visible, regardless of it's state in the psd.
@@ -93,7 +94,7 @@ these tags can be used on "group" layers.
 
 export settings can be tweaked by including a **json** file next to the psd, with an identical name.
 
-so next to *"layered_images/my_picture**.psd**"* include *"layered_images/my_picture**.json**"* with your settings.
+so next to "*layered_images/my_picture* **.psd**" include "*layered_images/my_picture* **.json**" with your settings.
 
 ```python
 # default settings
@@ -137,11 +138,14 @@ so next to *"layered_images/my_picture**.psd**"* include *"layered_images/my_pic
 }
 ```
 
-## todo - maybe never
-- blend mode shaders
-- optional padding for textures
-- text placement + preservation (i only work with krita, which doesn't preserve text info when converting to psd.)
-- upscaling with opencv + deep learning https://towardsdatascience.com/deep-learning-based-super-resolution-with-opencv-4fd736678066
+## todo
+- better documentation.
+- finalize polygon generator.
+- normal map generation.
+- blend mode shaders.
+- optional padding for textures.
+- text placement + preservation. (i only work with krita, which doesn't preserve text info when converting to psd.)
+- upscaling with opencv + deep learning. https://towardsdatascience.com/deep-learning-based-super-resolution-with-opencv-4fd736678066
 
 
 ## customizer
