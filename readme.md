@@ -7,22 +7,17 @@ psd (photoshop, krita, gimp...) -> godot.
 
 example included. you can delete everything outside the "addons" folder.
 
-![layers1](./readme_images/layers1.png)
+design in your prefered art tool | how you lay it out is how you get it out!
+:-:|:-:
+![layers1](./readme_images/layers1.png) | ![layers3](./readme_images/layers3.png)
 
-limage can auto generate convenient code:
+draw origins + spawn points | to make life easier
+:-:|:-:
+![points1](./readme_images/points1.png) | ![points2](./readme_images/points2.png)
+
+auto generate convenient code:
 
 ![layers2](./readme_images/layers2.png)
-
-how you lay it out is how you get it out!
-
-![layers3](./readme_images/layers3.png)
-
-draw origins to make rotations/scaling easier.
-
-draw points to make spawning easier.
-
-![points1](./readme_images/points1.png)
-![points2](./readme_images/points2.png)
 
 ## features
 
