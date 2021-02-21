@@ -52,15 +52,21 @@ func set_layer_as_cursor(name:String):
 		if "texture" in layer:
 			var tex = load(layer.texture)
 			var origin = -_v(layer.origin)
-			Input.set_custom_mouse_cursor(tex, Input.CURSOR_ARROW, origin)
+			Input.set_custom_mouse_cursor(tex, Input.CURSOR_ARROW, -origin)
 		else:
 			prints(layer.name, "has no texture")
 	else:
 		prints("no layer ", name)
 
 func get_node_type(layer:Dictionary, _as_controls:bool):
+	if "node" in layer.tags:
+		if ClassDB.class_exists(layer.tags.node):
+			return ClassDB.instance(layer.tags.node)
+		else:
+			push_warning("No node: %s" % layer.tags.node)
+	
 	var node:Node
-	if "texture" in layer:
+	if "texture" in layer or "options" in layer.tags:
 		node = (TextureRect if _as_controls else Sprite).new()
 	else:
 		node = (Control if _as_controls else Node2D).new()
@@ -74,15 +80,6 @@ func get_node_type(layer:Dictionary, _as_controls:bool):
 		node.set_script(load("res://addons/limage/LimageButton.gd"))
 	
 	return node
-
-#	if "options" in layer.tags:
-#		return load("res://addons/limage/LimageOption.gd")
-#	elif "button" in layer.tags:
-#		return load("res://addons/limage/LimageButton.gd")
-#	elif "texture" in layer:
-#		return TextureRect if _as_controls else Sprite
-#	else:
-#		return Control if _as_controls else Node2D
 
 func get_layer_names(l:Dictionary=data) -> PoolStringArray:
 	var out = []
@@ -99,7 +96,9 @@ func apply_visible(n:Node, l:Dictionary=data):
 		n.visible = l.visible
 
 func apply_opacity(n:Node, l:Dictionary=data):
-	if "opacity" in n: # Sprite3D
+	if "color" in n:
+		n.color.a = l.opacity / 255.0
+	elif "opacity" in n: # Sprite3D
 		n.opacity = l.opacity / 255.0
 	elif "modulate" in n: # Sprite2D, TextureRect
 		n.modulate.a = l.opacity / 255.0
@@ -113,33 +112,34 @@ func apply_texture(n:Node, d:Dictionary=data):
 		n.texture = load(d.texture)
 		if "centered" in n:
 			n.centered = false
-		
 #		elif "rect_pivot_offset" in n:
 #			n.rect_pivot_offset = -_v(d.origin)
 
 func apply_position(n:Node, d:Dictionary=data):
-	if "global_position" in n:
-		n.global_position = _v(d.global_position)
-		if "offset" in n:
-			n.offset = _v(d.origin)
-	elif "rect_global_position" in n:
-		n.rect_global_position = _v(d.global_position) + _v(d.origin)
+	if "position" in n:
+		n.position = _v(d.position)
+		
+		if "offset" in n and not n is Light2D:
+			n.offset = -_v(d.origin)
+	
+	elif "rect_position" in n:
+		n.rect_position = _v(d.position) + _v(d.origin)
 		n.rect_pivot_offset = -_v(d.origin)
+	
 	else:
 		prints("couldn't set position", n, d.name)
 
-func update_scene(parent_scene:Node, _as_controls:bool=false, _print:bool=true):
-	update_node(parent_scene, parent_scene, data, 0, _as_controls, _print)
+func update_node(top_node:Node, _as_contols:bool=false, _print:bool=true):
+	_update_node(top_node, top_node, data, 0, _as_contols, _print)
 
-func update_node(parent_scene:Node, node:Node, info:Dictionary, depth:int=0, _as_controls:bool=false, _print:bool=true):
+func _update_node(top_node:Node, node:Node, info:Dictionary, depth:int=0, _as_controls:bool=false, _print:bool=true):
 	apply_name(node, info)
 	
 	if "layer_info" in node:
 		node.layer_info = info
 	
 	if _print:
-		var print_head = "\t".repeat(depth)
-		print(print_head, node.name)
+		print("\t".repeat(depth), node.name)
 	
 	apply_visible(node, info)
 	apply_opacity(node, info)
@@ -152,25 +152,30 @@ func update_node(parent_scene:Node, node:Node, info:Dictionary, depth:int=0, _as
 	
 	else:
 		# update settings
-		if node != parent_scene:
+		if node != top_node:
 			apply_position(node, info)
 			apply_texture(node, info)
 		
 		# create and/or update child layers
 		if "layers" in info:
 			for child_info in info.layers:
+				if "toggles" in info.tags and not child_info.visible:
+					continue
+				
 				var child = node.get_node_or_null(child_info.name)
 				# create new
 				if child == null:
 					child = get_node_type(child_info, _as_controls)
 					node.add_child(child)
-					child.set_owner(parent_scene)
+					if top_node.owner == null:
+						child.set_owner(top_node)
+					else:
+						child.set_owner(top_node.owner)
 				
-				update_node(parent_scene, child, child_info, depth+1, _as_controls, _print)
+				_update_node(top_node, child, child_info, depth+1, _as_controls, _print)
 		
 		if "button" in info.tags:
 			node._update_state()
-		
 
 # returns first visible layer, otherwise returns first layer
 func get_default_layer(d:Dictionary=data) -> Dictionary:
@@ -178,6 +183,13 @@ func get_default_layer(d:Dictionary=data) -> Dictionary:
 		if l.visible:
 			return l
 	return d.layers[0] 
+
+# recursively passes every layer through the given function
+func call_on_descendants(fr:FuncRef, args:Array=[], d:Dictionary=data):
+	if "layers" in d:
+		for child in d["layers"]:
+			fr.call_func(child, args)
+			call_on_descendants(fr, args, child)
 
 func _v(d:Dictionary) -> Vector2:
 	return Vector2(d.x, d.y)

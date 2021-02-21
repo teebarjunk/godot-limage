@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://addons/limage/LimageButton.gd" type="Script" id=1]
 [ext_resource path="res://textures/room/frame.webp" type="Texture" id=2]
@@ -13,168 +13,151 @@
 [ext_resource path="res://textures/room/bg.webp" type="Texture" id=11]
 [ext_resource path="res://textures/room/window_frame.webp" type="Texture" id=12]
 [ext_resource path="res://textures/room/door-mask.webp" type="Texture" id=13]
+[ext_resource path="res://textures/room/lights-window.webp" type="Texture" id=14]
+[ext_resource path="res://textures/room/lights-lamp.webp" type="Texture" id=16]
+[ext_resource path="res://textures/room/lamp.webp" type="Texture" id=17]
 
 [sub_resource type="Animation" id=1]
-resource_name = "open"
-length = 0.5
+resource_name = "picture"
 tracks/0/type = "value"
-tracks/0/path = NodePath("picture:rect_rotation")
+tracks/0/path = NodePath("picture:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5 ),
-"transitions": PoolRealArray( 6.49802, 1 ),
+"times": PoolRealArray( 0, 0.3, 1 ),
+"transitions": PoolRealArray( 1, 10.1965, 1 ),
 "update": 0,
-"values": [ 0.0, -55.0 ]
+"values": [ Vector2( 211.5, 87.5 ), Vector2( 211.5, 87.5 ), Vector2( 211.5, 187.5 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("picture:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3, 1 ),
+"transitions": PoolRealArray( 1, 2.63902, 1 ),
+"update": 0,
+"values": [ 0.0, -19.1, -15.0 ]
 }
 
-[node name="room" type="Control"]
+[node name="room" type="Node2D"]
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-_as_controls = true
+
+[node name="bg" type="Sprite" parent="."]
+position = Vector2( 400, 300 )
+texture = ExtResource( 11 )
+centered = false
+offset = Vector2( -400, -300 )
+
+[node name="frame" type="Sprite" parent="."]
+position = Vector2( 651, 233.5 )
+texture = ExtResource( 2 )
+centered = false
+offset = Vector2( -79, -141.5 )
+
+[node name="door" type="Node2D" parent="."]
+position = Vector2( 658.5, 363.5 )
+script = ExtResource( 1 )
+
+[node name="normal" type="Sprite" parent="door"]
+position = Vector2( -10.5, -127.5 )
+texture = ExtResource( 7 )
+centered = false
+offset = Vector2( -72, -136 )
+
+[node name="pressed" type="Sprite" parent="door"]
+visible = false
+position = Vector2( -50, -96.5 )
+texture = ExtResource( 9 )
+centered = false
+offset = Vector2( -30.5, -157 )
+
+[node name="disabled" type="Sprite" parent="door"]
+visible = false
+position = Vector2( -8, -127.5 )
+texture = ExtResource( 8 )
+centered = false
+offset = Vector2( -74.5, -136 )
+
+[node name="hover" type="Sprite" parent="door"]
+visible = false
+position = Vector2( -15, -117 )
+texture = ExtResource( 6 )
+centered = false
+offset = Vector2( -67.5, -137.5 )
+
+[node name="mask" type="Sprite" parent="door"]
+visible = false
+position = Vector2( -7, -126 )
+texture = ExtResource( 13 )
+centered = false
+offset = Vector2( -75.5, -141.5 )
+
+[node name="vault" type="Sprite" parent="."]
+visible = false
+position = Vector2( 144.5, 152 )
+texture = ExtResource( 4 )
+centered = false
+offset = Vector2( -40.5, -42 )
+script = ExtResource( 1 )
+
+[node name="window_frame" type="Sprite" parent="."]
+position = Vector2( 360.5, 161.5 )
+texture = ExtResource( 12 )
+centered = false
+offset = Vector2( -89.5, -73.5 )
+
+[node name="spawns" type="Node2D" parent="."]
+position = Vector2( 365, 435 )
+
+[node name="window" type="Node2D" parent="spawns"]
+position = Vector2( -108, -112 )
+
+[node name="door" type="Node2D" parent="spawns"]
+position = Vector2( 310.5, -41.5 )
+
+[node name="player" type="Node2D" parent="spawns"]
+position = Vector2( -310.5, 111.5 )
+
+[node name="picture" type="Node2D" parent="."]
+position = Vector2( 211.5, 87.5 )
+
+[node name="pic2" type="Sprite" parent="picture"]
+position = Vector2( -43, 62.5 )
+texture = ExtResource( 10 )
+centered = false
+offset = Vector2( -86.5, -74 )
+
+[node name="pic1" type="Sprite" parent="picture"]
+visible = false
+position = Vector2( -44, 63 )
+texture = ExtResource( 5 )
+centered = false
+offset = Vector2( -83.5, -70.5 )
+
+[node name="lights" type="Node2D" parent="."]
+position = Vector2( 347.5, 231.5 )
+
+[node name="window" type="Light2D" parent="lights"]
+position = Vector2( -112.5, 15 )
+texture = ExtResource( 14 )
+color = Color( 1, 1, 1, 0.648835 )
+range_height = -2048.0
+
+[node name="lamp" type="Light2D" parent="lights"]
+position = Vector2( 158, 0 )
+texture = ExtResource( 16 )
+color = Color( 1, 1, 1, 0.274804 )
+
+[node name="lamp" type="Sprite" parent="."]
+position = Vector2( 524, 270 )
+texture = ExtResource( 17 )
+centered = false
+offset = Vector2( -47, -160 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/open = SubResource( 1 )
-
-[node name="bg" type="TextureRect" parent="."]
-margin_right = 800.0
-margin_bottom = 600.0
-rect_pivot_offset = Vector2( 400, 300 )
-mouse_filter = 2
-texture = ExtResource( 11 )
-
-[node name="frame" type="TextureRect" parent="."]
-margin_left = 572.0
-margin_top = 92.0
-margin_right = 730.0
-margin_bottom = 375.0
-rect_pivot_offset = Vector2( 79, 141.5 )
-mouse_filter = 2
-texture = ExtResource( 2 )
-
-[node name="door" type="Control" parent="."]
-margin_left = 576.0
-margin_top = 100.0
-margin_right = 576.0
-margin_bottom = 100.0
-rect_pivot_offset = Vector2( 82.5, 263.5 )
-mouse_filter = 2
-script = ExtResource( 1 )
-
-[node name="normal" type="TextureRect" parent="door"]
-margin_right = 144.0
-margin_bottom = 272.0
-rect_pivot_offset = Vector2( 72, 136 )
-mouse_filter = 2
-texture = ExtResource( 7 )
-
-[node name="pressed" type="TextureRect" parent="door"]
-visible = false
-margin_left = 2.0
-margin_top = 10.0
-margin_right = 63.0
-margin_bottom = 324.0
-rect_pivot_offset = Vector2( 30.5, 157 )
-mouse_filter = 2
-texture = ExtResource( 9 )
-
-[node name="disabled" type="TextureRect" parent="door"]
-visible = false
-margin_right = 149.0
-margin_bottom = 272.0
-rect_pivot_offset = Vector2( 74.5, 136 )
-mouse_filter = 2
-texture = ExtResource( 8 )
-
-[node name="hover" type="TextureRect" parent="door"]
-visible = false
-margin_top = 9.0
-margin_right = 135.0
-margin_bottom = 284.0
-rect_pivot_offset = Vector2( 67.5, 137.5 )
-mouse_filter = 2
-texture = ExtResource( 6 )
-
-[node name="mask" type="TextureRect" parent="door"]
-visible = false
-margin_top = -4.0
-margin_right = 151.0
-margin_bottom = 279.0
-rect_pivot_offset = Vector2( 75.5, 141.5 )
-mouse_filter = 2
-texture = ExtResource( 13 )
-
-[node name="vault" type="TextureRect" parent="."]
-margin_left = 104.0
-margin_top = 110.0
-margin_right = 185.0
-margin_bottom = 194.0
-rect_pivot_offset = Vector2( 40.5, 42 )
-mouse_filter = 2
-texture = ExtResource( 4 )
-script = ExtResource( 1 )
-
-[node name="window_frame" type="TextureRect" parent="."]
-margin_left = 271.0
-margin_top = 88.0
-margin_right = 450.0
-margin_bottom = 235.0
-rect_pivot_offset = Vector2( 89.5, 73.5 )
-mouse_filter = 2
-texture = ExtResource( 12 )
-
-[node name="spawns" type="Control" parent="."]
-margin_left = 43.0
-margin_top = 312.0
-margin_right = 43.0
-margin_bottom = 312.0
-rect_pivot_offset = Vector2( 322, 123 )
-mouse_filter = 2
-
-[node name="window" type="Control" parent="spawns"]
-margin_left = 203.0
-margin_right = 203.0
-rect_pivot_offset = Vector2( 11, 11 )
-mouse_filter = 2
-
-[node name="door" type="Control" parent="spawns"]
-margin_left = 621.0
-margin_top = 70.0
-margin_right = 621.0
-margin_bottom = 70.0
-rect_pivot_offset = Vector2( 11.5, 11.5 )
-mouse_filter = 2
-
-[node name="player" type="Control" parent="spawns"]
-margin_top = 223.0
-margin_bottom = 223.0
-rect_pivot_offset = Vector2( 11.5, 11.5 )
-mouse_filter = 2
-
-[node name="picture" type="Control" parent="."]
-margin_left = 53.0
-margin_top = 80.0
-margin_right = 53.0
-margin_bottom = 80.0
-rect_pivot_offset = Vector2( 158.5, 7.5 )
-
-[node name="pic2" type="TextureRect" parent="picture"]
-visible = false
-margin_left = -2.0
-margin_top = -4.0
-margin_right = 171.0
-margin_bottom = 144.0
-rect_pivot_offset = Vector2( 86.5, 74 )
-mouse_filter = 0
-texture = ExtResource( 10 )
-
-[node name="pic1" type="TextureRect" parent="picture"]
-margin_right = 167.0
-margin_bottom = 141.0
-rect_pivot_offset = Vector2( 83.5, 70.5 )
-mouse_filter = 0
-texture = ExtResource( 5 )
+anims/picture = SubResource( 1 )

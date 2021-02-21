@@ -5,421 +5,390 @@
 [resource]
 script = ExtResource( 1 )
 data = {
-    "name": "cool_guy",
-    "path": [],
-    "tags": {},
-    "visible": true,
-    "opacity": 255,
-    "size": {
-        "x": 800,
-        "y": 600
-    },
-    "origin": {
-        "x": 400.0,
-        "y": 300.0
-    },
-    "layers": [
-        {
-            "name": "base",
-            "path": [
-                "base"
-            ],
-            "tags": {},
-            "visible": true,
-            "opacity": 255,
-            "blend_mode": "normal",
-            "global_position": {
-                "x": 2.5,
-                "y": -159.0
-            },
-            "size": {
-                "x": 204,
-                "y": 323
-            },
-            "origin": {
-                "x": -102.0,
-                "y": -161.5
-            },
-            "scale": 1,
-            "texture": "res://textures/cool_guy/base.webp"
-        },
-        {
-            "name": "expression",
-            "path": [
-                "expression"
-            ],
-            "tags": {
-                "options": true
-            },
-            "visible": true,
-            "opacity": 255,
-            "blend_mode": "normal",
-            "global_position": {
-                "x": -10.0,
-                "y": -229.5
-            },
-            "size": {
-                "x": 87,
-                "y": 56
-            },
-            "origin": {
-                "x": -43.5,
-                "y": -28.0
-            },
-            "layers": [
-                {
-                    "name": "default",
-                    "path": [
-                        "expression",
-                        "default"
-                    ],
-                    "tags": {},
-                    "visible": true,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": -10.0,
-                        "y": -229.5
-                    },
-                    "size": {
-                        "x": 87,
-                        "y": 56
-                    },
-                    "origin": {
-                        "x": -43.5,
-                        "y": -28.0
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/expression-default.webp"
-                },
-                {
-                    "name": "happy",
-                    "path": [
-                        "expression",
-                        "happy"
-                    ],
-                    "tags": {},
-                    "visible": false,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": -10.0,
-                        "y": -229.5
-                    },
-                    "size": {
-                        "x": 87,
-                        "y": 56
-                    },
-                    "origin": {
-                        "x": -43.5,
-                        "y": -28.0
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/expression-happy.webp"
-                },
-                {
-                    "name": "sus",
-                    "path": [
-                        "expression",
-                        "sus"
-                    ],
-                    "tags": {},
-                    "visible": false,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": -10.0,
-                        "y": -222.5
-                    },
-                    "size": {
-                        "x": 87,
-                        "y": 40
-                    },
-                    "origin": {
-                        "x": -43.5,
-                        "y": -20.0
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/expression-sus.webp"
-                },
-                {
-                    "name": "angry",
-                    "path": [
-                        "expression",
-                        "angry"
-                    ],
-                    "tags": {},
-                    "visible": false,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": -10.0,
-                        "y": -227.0
-                    },
-                    "size": {
-                        "x": 87,
-                        "y": 51
-                    },
-                    "origin": {
-                        "x": -43.5,
-                        "y": -25.5
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/expression-angry.webp"
-                }
-            ]
-        },
-        {
-            "name": "shirt",
-            "path": [
-                "shirt"
-            ],
-            "tags": {
-                "options": true
-            },
-            "visible": true,
-            "opacity": 255,
-            "blend_mode": "normal",
-            "global_position": {
-                "x": 3.0,
-                "y": -116.0
-            },
-            "size": {
-                "x": 207,
-                "y": 151
-            },
-            "origin": {
-                "x": -103.5,
-                "y": -75.5
-            },
-            "layers": [
-                {
-                    "name": "white",
-                    "path": [
-                        "shirt",
-                        "white"
-                    ],
-                    "tags": {},
-                    "visible": false,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": 2.5,
-                        "y": -125.5
-                    },
-                    "size": {
-                        "x": 206,
-                        "y": 136
-                    },
-                    "origin": {
-                        "x": -103.0,
-                        "y": -68.0
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/shirt-white.webp"
-                },
-                {
-                    "name": "blue",
-                    "path": [
-                        "shirt",
-                        "blue"
-                    ],
-                    "tags": {},
-                    "visible": true,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": 3.0,
-                        "y": -116.0
-                    },
-                    "size": {
-                        "x": 207,
-                        "y": 151
-                    },
-                    "origin": {
-                        "x": -103.5,
-                        "y": -75.5
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/shirt-blue.webp"
-                },
-                {
-                    "name": "suit",
-                    "path": [
-                        "shirt",
-                        "suit"
-                    ],
-                    "tags": {},
-                    "visible": false,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": 1.5,
-                        "y": -127.0
-                    },
-                    "size": {
-                        "x": 208,
-                        "y": 143
-                    },
-                    "origin": {
-                        "x": -104.0,
-                        "y": -71.5
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/shirt-suit.webp"
-                }
-            ]
-        },
-        {
-            "name": "worn",
-            "path": [
-                "worn"
-            ],
-            "tags": {
-                "toggles": true
-            },
-            "visible": true,
-            "opacity": 255,
-            "blend_mode": "normal",
-            "global_position": {
-                "x": 43.0,
-                "y": -301.5
-            },
-            "size": {
-                "x": 177,
-                "y": 64
-            },
-            "origin": {
-                "x": -88.5,
-                "y": -32.0
-            },
-            "layers": [
-                {
-                    "name": "sunglasses",
-                    "path": [
-                        "worn",
-                        "sunglasses"
-                    ],
-                    "tags": {},
-                    "visible": false,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": 10.0,
-                        "y": -231.0
-                    },
-                    "size": {
-                        "x": 127,
-                        "y": 41
-                    },
-                    "origin": {
-                        "x": -63.5,
-                        "y": -20.5
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/worn-sunglasses.webp"
-                },
-                {
-                    "name": "hat",
-                    "path": [
-                        "worn",
-                        "hat"
-                    ],
-                    "tags": {},
-                    "visible": true,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": 43.0,
-                        "y": -301.5
-                    },
-                    "size": {
-                        "x": 177,
-                        "y": 64
-                    },
-                    "origin": {
-                        "x": -88.5,
-                        "y": -32.0
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/worn-hat.webp"
-                },
-                {
-                    "name": "chain",
-                    "path": [
-                        "worn",
-                        "chain"
-                    ],
-                    "tags": {},
-                    "visible": false,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": 4.5,
-                        "y": -174.5
-                    },
-                    "size": {
-                        "x": 130,
-                        "y": 36
-                    },
-                    "origin": {
-                        "x": -65.0,
-                        "y": -18.0
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/worn-chain.webp"
-                },
-                {
-                    "name": "chain2",
-                    "path": [
-                        "worn",
-                        "chain2"
-                    ],
-                    "tags": {},
-                    "visible": false,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": 12.0,
-                        "y": -163.5
-                    },
-                    "size": {
-                        "x": 137,
-                        "y": 60
-                    },
-                    "origin": {
-                        "x": -68.5,
-                        "y": -30.0
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/worn-chain2.webp"
-                },
-                {
-                    "name": "beard",
-                    "path": [
-                        "worn",
-                        "beard"
-                    ],
-                    "tags": {},
-                    "visible": false,
-                    "opacity": 255,
-                    "blend_mode": "normal",
-                    "global_position": {
-                        "x": 3.5,
-                        "y": -214.5
-                    },
-                    "size": {
-                        "x": 116,
-                        "y": 98
-                    },
-                    "origin": {
-                        "x": -58.0,
-                        "y": -49.0
-                    },
-                    "scale": 1,
-                    "texture": "res://textures/cool_guy/worn-beard.webp"
-                }
-            ]
-        }
-    ]
+"blend_mode": "",
+"layers": [ {
+"blend_mode": "normal",
+"name": "base",
+"opacity": 255,
+"origin": {
+"x": 102.0,
+"y": 161.5
+},
+"path": [ "base" ],
+"position": {
+"x": 2.5,
+"y": -159.0
+},
+"scale": 1,
+"size": {
+"x": 204,
+"y": 323
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/base.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"layers": [ {
+"blend_mode": "normal",
+"name": "default",
+"opacity": 255,
+"origin": {
+"x": 43.5,
+"y": 28.0
+},
+"path": [ "expression", "default" ],
+"position": {
+"x": -10.0,
+"y": -229.5
+},
+"scale": 1,
+"size": {
+"x": 87,
+"y": 56
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/expression-default.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"name": "happy",
+"opacity": 255,
+"origin": {
+"x": 43.5,
+"y": 28.0
+},
+"path": [ "expression", "happy" ],
+"position": {
+"x": -10.0,
+"y": -229.5
+},
+"scale": 1,
+"size": {
+"x": 87,
+"y": 56
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/expression-happy.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"name": "sus",
+"opacity": 255,
+"origin": {
+"x": 43.5,
+"y": 20.0
+},
+"path": [ "expression", "sus" ],
+"position": {
+"x": -10.0,
+"y": -222.5
+},
+"scale": 1,
+"size": {
+"x": 87,
+"y": 40
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/expression-sus.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"name": "angry",
+"opacity": 255,
+"origin": {
+"x": 43.5,
+"y": 25.5
+},
+"path": [ "expression", "angry" ],
+"position": {
+"x": -10.0,
+"y": -227.0
+},
+"scale": 1,
+"size": {
+"x": 87,
+"y": 51
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/expression-angry.webp",
+"visible": false
+} ],
+"name": "expression",
+"opacity": 255,
+"origin": {
+"x": 43.5,
+"y": 28.0
+},
+"path": [ "expression" ],
+"position": {
+"x": -10.0,
+"y": -229.5
+},
+"size": {
+"x": 87,
+"y": 56
+},
+"tags": {
+"options": true
+},
+"visible": true
+}, {
+"blend_mode": "normal",
+"layers": [ {
+"blend_mode": "normal",
+"name": "white",
+"opacity": 255,
+"origin": {
+"x": 103.0,
+"y": 68.0
+},
+"path": [ "shirt", "white" ],
+"position": {
+"x": 2.5,
+"y": -125.5
+},
+"scale": 1,
+"size": {
+"x": 206,
+"y": 136
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/shirt-white.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"name": "blue",
+"opacity": 255,
+"origin": {
+"x": 103.5,
+"y": 75.5
+},
+"path": [ "shirt", "blue" ],
+"position": {
+"x": 3.0,
+"y": -116.0
+},
+"scale": 1,
+"size": {
+"x": 207,
+"y": 151
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/shirt-blue.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"name": "suit",
+"opacity": 255,
+"origin": {
+"x": 104.0,
+"y": 71.5
+},
+"path": [ "shirt", "suit" ],
+"position": {
+"x": 1.5,
+"y": -127.0
+},
+"scale": 1,
+"size": {
+"x": 208,
+"y": 143
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/shirt-suit.webp",
+"visible": false
+} ],
+"name": "shirt",
+"opacity": 255,
+"origin": {
+"x": 103.5,
+"y": 75.5
+},
+"path": [ "shirt" ],
+"position": {
+"x": 3.0,
+"y": -116.0
+},
+"size": {
+"x": 207,
+"y": 151
+},
+"tags": {
+"options": true
+},
+"visible": true
+}, {
+"blend_mode": "normal",
+"layers": [ {
+"blend_mode": "normal",
+"name": "sunglasses",
+"opacity": 255,
+"origin": {
+"x": 63.5,
+"y": 20.5
+},
+"path": [ "worn", "sunglasses" ],
+"position": {
+"x": -33.0,
+"y": 70.5
+},
+"scale": 1,
+"size": {
+"x": 127,
+"y": 41
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/worn-sunglasses.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"name": "hat",
+"opacity": 255,
+"origin": {
+"x": 88.5,
+"y": 32.0
+},
+"path": [ "worn", "hat" ],
+"position": {
+"x": 0.0,
+"y": 0.0
+},
+"scale": 1,
+"size": {
+"x": 177,
+"y": 64
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/worn-hat.webp",
+"visible": true
+}, {
+"blend_mode": "normal",
+"name": "chain",
+"opacity": 255,
+"origin": {
+"x": 65.0,
+"y": 18.0
+},
+"path": [ "worn", "chain" ],
+"position": {
+"x": -38.5,
+"y": 127.0
+},
+"scale": 1,
+"size": {
+"x": 130,
+"y": 36
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/worn-chain.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"name": "chain2",
+"opacity": 255,
+"origin": {
+"x": 68.5,
+"y": 30.0
+},
+"path": [ "worn", "chain2" ],
+"position": {
+"x": -31.0,
+"y": 138.0
+},
+"scale": 1,
+"size": {
+"x": 137,
+"y": 60
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/worn-chain2.webp",
+"visible": false
+}, {
+"blend_mode": "normal",
+"name": "beard",
+"opacity": 255,
+"origin": {
+"x": 58.0,
+"y": 49.0
+},
+"path": [ "worn", "beard" ],
+"position": {
+"x": -39.5,
+"y": 87.0
+},
+"scale": 1,
+"size": {
+"x": 116,
+"y": 98
+},
+"tags": {
+
+},
+"texture": "res://textures/cool_guy/worn-beard.webp",
+"visible": false
+} ],
+"name": "worn",
+"opacity": 255,
+"origin": {
+"x": 88.5,
+"y": 32.0
+},
+"path": [ "worn" ],
+"position": {
+"x": 43.0,
+"y": -301.5
+},
+"size": {
+"x": 177,
+"y": 64
+},
+"tags": {
+"toggles": true
+},
+"visible": true
+} ],
+"name": "cool_guy",
+"opacity": 255,
+"origin": {
+"x": 0,
+"y": 0
+},
+"path": [  ],
+"position": {
+"x": 0,
+"y": 0
+},
+"size": {
+"x": 800,
+"y": 600
+},
+"tags": {
+"root": true
+},
+"visible": true
 }

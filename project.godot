@@ -41,6 +41,10 @@ _global_script_class_icons={
 config/name="Limage"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=800
+
 [editor_plugins]
 
 enabled=PoolStringArray( "limage" )

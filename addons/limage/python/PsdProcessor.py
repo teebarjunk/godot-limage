@@ -63,6 +63,10 @@ LOOK_IN:str = "layered_images"
 def file_time(path) -> str:
 	return str(path.lstat().st_mtime)
 
+def file_exists(local_path) -> bool:
+	path = DIR_RESOURCES / local_path
+	return path.exists()
+
 def create_directory(path):
 	if not path.exists() and str(path).startswith(str(DIR_RESOURCES)):
 		print(f"creating directory: {path}")
@@ -110,7 +114,14 @@ class PSDProcessor:
 		
 		# filename without extension
 		self.file_name = self.path.stem# self.path.rsplit("/", 1)[1].rsplit(".", 1)[0]
+		self.name = self.get("name", self.file_name)
+		self.texture_dir = self.get("texture_dir")
+		if self.texture_dir == None:
+			self.texture_dir = f"textures/{self.name}"
+		
+		self.data_dir = self.get("data_dir")
 	
+	def load(self):
 		self.psd = PSDImage.open(self.path)
 		self.wide, self.high = self.psd.size
 		
@@ -118,16 +129,12 @@ class PSDProcessor:
 		self.layer_info = {}
 		self.texture_paths = []
 		self.scenes = []
-		self.name = self.get("name", self.file_name)
+		
 		self.output = {
 			"name": self.name,
 			"textures": self.texture_paths,
 			"scenes": self.scenes
 		}
-		
-		self.texture_dir = self.get("texture_dir")
-		if self.texture_dir == None:
-			self.texture_dir = f"textures/{self.name}"
 		
 		self.scale = self.get("scale")
 		self.origin = Vec2(self.wide, self.high) * Vec2(self.get("origin"))
@@ -136,7 +143,7 @@ class PSDProcessor:
 		self.texture_extension = self.get("texture_extension", self.format.lower())
 		self.extension_settings = dict(self.get(self.format, {}))
 		self.structure = self.get("structure")
-		self.data_dir = self.get("data_dir")
+		
 		
 		# set default extension settings, if not set.
 		if self.format in DEFAULT_SETTINGS:
@@ -179,7 +186,6 @@ class PSDProcessor:
 			h = b - y
 			l._clamped_bbox = (x, y, r, b)
 			l._size = Vec2(w, h)
-			l._center = Vec2(x, y) + l._size * .5
 			l._scale = self.scale
 			l._origin = Vec2(x, y) + l._size * .5
 			l._points = {}
@@ -253,14 +259,14 @@ class PSDProcessor:
 			l._global_position = Vec2(l._clamped_bbox[0], l._clamped_bbox[1])
 			
 		for l in all_layers:
-			l._origin -= l._global_position # localize
+			# l._origin -= l._global_position # localize
 			
-			l._global_position += l._origin # offset origin
-			l._global_position -= self.origin
+			# l._global_position += l._origin # offset origin
+			# l._global_position -= self.origin
 			
 			l._origin *= l._scale
 			l._global_position *= l._scale
-			
+
 			l._output = {
 				"name": l.name,
 				"path": l._full_path,
@@ -268,10 +274,9 @@ class PSDProcessor:
 				"visible": l._old_visible,
 				"opacity": l._old_opacity,
 				"blend_mode": l._old_blend_mode,
-				"global_position": l._global_position,
 				"size": l._size * l._scale,
-				# "scale": l._scale / self.scale,
-				"origin": l._origin.negative()
+				"position": l._global_position,
+				"origin": l._origin
 			}
 			
 			if hasattr(l, "_texture"):
@@ -311,20 +316,40 @@ class PSDProcessor:
 		output = {
 			"name": self.file_name,
 			"path": [],
-			"tags": {},
+			"tags": {"root": True},
 			"visible": True,
 			"opacity": 255,
 			"size": Vec2(self.wide, self.high),
-			"origin": Vec2(self.wide, self.high) * .5,
 			"layers": [x._output for x in self.psd if x in self.all_layers],
-			# "blend_mode": l._old_blend_mode,
-			# "global_position": l._global_position,
+			"blend_mode": "",
+			"position": Vec2(0, 0),
+			"origin": Vec2(0, 0),
 		}
 		
+		def all_descendants(parent, layer, func):
+			func(parent, layer)
+			if "layers" in layer:
+				for child in layer["layers"]:
+					all_descendants(layer, child, func)
+		
+		# localize origin points
+		def fix_origin(parent, child):
+			if parent:
+				child["origin"] -= child["position"]
+				child["position"] += child["origin"]
+		all_descendants(None, output, fix_origin)
+		
+		# localize layers
+		def localize(parent, child):
+			if parent:
+				if not "options" in parent["tags"]: # options need to use parents origin.
+					child["position"] -= parent["position"]
+				child["position"] -= self.origin
+		all_descendants(None, output, localize)
+		
 		# layer info
-		local_path = self.data_path(self.name, "tres")
 		tres_text = godot.TEMPLATE_TRES + json.dumps(output, indent=4)
-		save_string(local_path, tres_text)
+		save_string(self.get_local_tres_path(), tres_text)
 		
 		# godot script
 		has_script, script = godot.generate_script(self.all_layers)
@@ -332,6 +357,9 @@ class PSDProcessor:
 			script_name = self.name.replace(" ", "_")
 			local_path = self.data_path(script_name, "gd")
 			save_string(local_path, script)
+	
+	def get_local_tres_path(self):
+		return self.data_path(self.name, "tres")
 	
 	def data_path(self, local_path, extension):
 		return f"{self.data_dir}/{local_path}.{extension}"
@@ -386,7 +414,7 @@ class PSDProcessor:
 			if "poly" in l._tags:
 				import genpoly
 				poly_path = self.data_path(f"poly_{self.name}", "tscn")
-				points = genpoly.get_points(image, l._texture)# str(DIR_RESOURCES / local_path), l._texture)
+				points = genpoly.get_points(image, l._texture)
 				save_string(poly_path, points)
 			
 			# RGBA -> RGB
@@ -422,18 +450,20 @@ if directory.exists():
 		settings_path = f"{LOOK_IN}/{fname}.json"
 		settings = load_dict(settings_path, {})
 		
-		if FORCE_UPDATE or\
-			build_info["modified"] != new_time or\
-			settings_changed(build_info["settings"], settings):
+		psd_proc = PSDProcessor(fpath, settings)
+		was_psd_modified = build_info["modified"] != new_time
+		was_settings_modified = settings_changed(build_info["settings"], settings)
+		was_data_deleted = not file_exists(psd_proc.get_local_tres_path())
+		
+		if FORCE_UPDATE or was_psd_modified or was_settings_modified or was_data_deleted:
+			psd_proc.load()
 			
-				PSDProcessor(fpath, settings)
-				
-				new_data = {
-					"path": str(fpath),
-					"modified": new_time,
-					"settings": settings
-				}
-				save_dict(build_info_path, new_data)
+			new_data = {
+				"path": str(fpath),
+				"modified": new_time,
+				"settings": settings
+			}
+			save_dict(build_info_path, new_data)
 		
 		else:
 			print(f"already up to date: {fname}")

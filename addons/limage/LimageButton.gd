@@ -40,7 +40,7 @@ func _update_state():
 		child.visible = child.name == state
 
 func get_color_at(sprite, mouse_pos:Vector2) -> Color:
-	if sprite.texture != null:
+	if sprite and sprite.texture:
 		var r = sprite.get_rect()
 		var mp:Vector2
 		
