@@ -5,89 +5,91 @@
 [resource]
 script = ExtResource( 1 )
 data = {
-"layers": [ {
-"blend_mode": "normal",
-"global_position": {
-"x": 479.0,
-"y": 317.0
-},
-"name": "arrow",
-"opacity": 255,
-"origin": {
-"x": -1.0,
-"y": -1.0
-},
-"path": [ "arrow" ],
-"scale": 1,
-"size": {
-"x": 44,
-"y": 42
-},
-"tags": {
-
-},
-"texture": "res://textures/cursor/arrow.webp",
-"visible": true
-}, {
-"blend_mode": "normal",
-"global_position": {
-"x": 391.5,
-"y": 307.5
-},
-"name": "finger",
-"opacity": 255,
-"origin": {
-"x": -12.5,
-"y": -3.5
-},
-"path": [ "finger" ],
-"scale": 1,
-"size": {
-"x": 35,
-"y": 60
-},
-"tags": {
-
-},
-"texture": "res://textures/cursor/finger.webp",
-"visible": true
-}, {
-"blend_mode": "normal",
-"global_position": {
-"x": 444.0,
-"y": 392.5
-},
-"name": "drag",
-"opacity": 255,
-"origin": {
-"x": -21.0,
-"y": -24.5
-},
-"path": [ "drag" ],
-"scale": 1,
-"size": {
-"x": 47,
-"y": 48
-},
-"tags": {
-
-},
-"texture": "res://textures/cursor/drag.webp",
-"visible": true
-} ],
-"name": "cursor",
-"opacity": 255,
-"origin": {
-"x": 400.0,
-"y": 300.0
-},
-"path": [  ],
-"size": {
-"x": 800,
-"y": 600
-},
-"tags": {
-
-},
-"visible": true
+    "name": "cursor",
+    "path": [],
+    "tags": {},
+    "visible": true,
+    "opacity": 255,
+    "size": {
+        "x": 800,
+        "y": 600
+    },
+    "origin": {
+        "x": 400.0,
+        "y": 300.0
+    },
+    "layers": [
+        {
+            "name": "arrow",
+            "path": [
+                "arrow"
+            ],
+            "tags": {},
+            "visible": true,
+            "opacity": 255,
+            "blend_mode": "normal",
+            "global_position": {
+                "x": 479.0,
+                "y": 317.0
+            },
+            "size": {
+                "x": 44,
+                "y": 42
+            },
+            "origin": {
+                "x": -1.0,
+                "y": -1.0
+            },
+            "scale": 1,
+            "texture": "res://textures/cursor/arrow.webp"
+        },
+        {
+            "name": "finger",
+            "path": [
+                "finger"
+            ],
+            "tags": {},
+            "visible": true,
+            "opacity": 255,
+            "blend_mode": "normal",
+            "global_position": {
+                "x": 391.5,
+                "y": 307.5
+            },
+            "size": {
+                "x": 35,
+                "y": 60
+            },
+            "origin": {
+                "x": -12.5,
+                "y": -3.5
+            },
+            "scale": 1,
+            "texture": "res://textures/cursor/finger.webp"
+        },
+        {
+            "name": "drag",
+            "path": [
+                "drag"
+            ],
+            "tags": {},
+            "visible": true,
+            "opacity": 255,
+            "blend_mode": "normal",
+            "global_position": {
+                "x": 444.0,
+                "y": 392.5
+            },
+            "size": {
+                "x": 47,
+                "y": 48
+            },
+            "origin": {
+                "x": -21.0,
+                "y": -24.5
+            },
+            "scale": 1,
+            "texture": "res://textures/cursor/drag.webp"
+        }
+    ]
 }

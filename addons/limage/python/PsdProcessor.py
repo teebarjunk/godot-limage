@@ -1,10 +1,23 @@
+import PIL
 from PIL import Image
+from PIL import features
 from psd_tools import PSDImage
 from psd_tools.constants import Tag
 # from psd_tools.constants import BlendMode
-import os, json, math, sys
+import json, math, sys
+from pathlib import Path
 import util, godot
+from util import get
 from classes import Vec2
+
+__version__ = "0.2"
+
+WEBP_SUPPORTED:bool = features.check_module('webp')
+if not WEBP_SUPPORTED:
+	print(f"PILLOW v{PIL.__version__}")
+	print(f"WEBP support: {WEBP_SUPPORTED}")
+	print(f"  libwebp library might not be installed")
+	print(f"  Ubuntu: sudo apt-get install -y libwebp-dev")
 
 DEFAULT_SETTINGS:dict = {
 	"path": "",						# location of psd
@@ -12,11 +25,11 @@ DEFAULT_SETTINGS:dict = {
 	
 	"texture_dir": None,			# if set, saves textures here
 	"data_dir": "data",				# if set, saves layer data here
-	# "script_dir": None,				# if set, saves godot scripts here
+	# "script_dir": None,			# if set, saves godot scripts here
 	
 	# texture related
 	"scale": 1,						# rescale textures
-	"mask_scale": 1.0,#.25,				# shrink masks?
+	"mask_scale": 1.0,#.25,			# shrink masks?
 	"origin": [0, 0],				# multiplied by size of texture
 	
 	# can really decrease file size, but at cost of color range.
@@ -37,51 +50,67 @@ DEFAULT_SETTINGS:dict = {
 		"quality": 80
 	},
 
-	"JPG": {
+	"JPEG": {
 		"optimize": True,
 		"quality": 80
 	}
 }
-FORCE_UPDATE:bool = True if len(sys.argv) <= 1 else sys.argv[1] == "True"# True
-SKIP_IMAGES:bool = False if len(sys.argv) <= 2 else sys.argv[2] == "True"#True
+FORCE_UPDATE:bool = False if len(sys.argv) <= 1 else sys.argv[1] == "True"
+SKIP_IMAGES:bool = False if len(sys.argv) <= 2 else sys.argv[2] == "True"
+DIR_RESOURCES = Path("/".join(sys.argv[0].split("/")[:-4]))
 LOOK_IN:str = "layered_images"
 
-print("args", sys.argv)
+def file_time(path) -> str:
+	return str(path.lstat().st_mtime)
+
+def create_directory(path):
+	if not path.exists() and str(path).startswith(str(DIR_RESOURCES)):
+		print(f"creating directory: {path}")
+		path.mkdir(parents=True, exist_ok=True)
+
+def load_dict(local_path, default:object=None) -> object:
+	path = DIR_RESOURCES / local_path
+	if path.exists():
+		with open(path, "r") as file:
+			return json.load(file)
+	return default
+
+def save_dict(local_path, data:dict, indent:bool=True, loud:bool=True):
+	path = DIR_RESOURCES / local_path
+	create_directory(path.parents[0])
+	with open(path, "w") as file:
+		if indent:
+			json.dump(data, file, indent=4)
+		else:
+			json.dump(data, file, separators=(',', ':'))
+	print(f"saved: {local_path}")
+
+def save_string(local_path, string:str):
+	path = DIR_RESOURCES / local_path
+	create_directory(path.parents[0])
+	with open(path, "w", encoding="utf-8") as file:
+		file.write(string)
+	print(f"saved: {local_path}")
+
+def save_image(local_path, image, format, extension_settings):
+	path = DIR_RESOURCES / local_path
+	create_directory(path.parents[0])
+	image.save(path, format, **extension_settings)
+	print(f"saved: {local_path}")
 
 class PSDProcessor:
-	def __init__(self, settings:dict):
-		self.settings = settings
-		self.update_image = True
-		
-		self.path = self.get("path", "")
-		if self.path.startswith("res://"):
-			self.path = self.path.replace("res://", util.DIR_RESOURCES)
-		
-		# filename without extension
-		self.file_name = self.path.rsplit("/", 1)[1].rsplit(".", 1)[0]
-	
 	# settings
 	def get(self, key:str, default=None):
-		return util.get(self.settings, key, util.get(DEFAULT_SETTINGS, key, default))
+		return get(self.settings, key, get(DEFAULT_SETTINGS, key, default))
 	
-	def was_modified(self, oldd:dict) -> bool:
-		for key in self.settings:
-			if key not in oldd:
-				return False
+	def __init__(self, path, settings:dict):
+		self.settings = settings
+		self.update_image = True
+		self.path = path
 		
-		for key in oldd:
-			if oldd[key] != self.settings[key]:
-				return False
-		
-		return True
+		# filename without extension
+		self.file_name = self.path.stem# self.path.rsplit("/", 1)[1].rsplit(".", 1)[0]
 	
-	def get_child(self, layer, child_name):
-		for child in layer:
-			if child.name == child_name:
-				return child
-		return None
-	
-	def load(self):
 		self.psd = PSDImage.open(self.path)
 		self.wide, self.high = self.psd.size
 		
@@ -140,7 +169,7 @@ class PSDProcessor:
 			l._old_opacity = l.opacity
 			l._old_blend_mode = str(l.blend_mode).split(".")[1].lower()
 			# force visible
-			l.visible = True#util.get(l._tags, "visible", True)
+			l.visible = True
 			l.opacity = 255
 			
 			# get position + size
@@ -176,20 +205,20 @@ class PSDProcessor:
 					all_layers.remove(child_origin)
 					child = self.get_child(self.psd, child_origin.name)
 					child._origin = child_origin._origin
-					print("set", child_origin.name, "origin to", child._origin)
+					# print("set", child_origin.name, "origin to", child._origin)
 		
 		for l in list(all_layers):
 			if l not in all_layers:
 				continue
 			
+			# if merging, ignore lower data
+			if "merge" in l._tags:
+				for child in l.descendants():
+					all_layers.remove(child)
+			
 			# determine if this is a group
 			l._is_group = l.kind == "group" and not "merge" in l._tags
 			if l._is_group:
-				# if merging, ignore lower data
-				if "merge" in l._tags:
-					for child in l.descendants():
-						all_layers.remove(l)
-				
 				# pass on descendant data
 				for child in l.descendants():
 					for key in l._descendant_tags:
@@ -252,18 +281,32 @@ class PSDProcessor:
 		self.all_layers = all_layers
 		self.save_data()
 	
+	def was_modified(self, oldd:dict) -> bool:
+		for key in self.settings:
+			if key not in oldd:
+				return False
+		
+		for key in oldd:
+			if oldd[key] != self.settings[key]:
+				return False
+		
+		return True
+	
+	def get_child(self, layer, child_name):
+		for child in layer:
+			if child.name == child_name:
+				return child
+		return None
+	
 	def save_data(self):
-		
-		
 		if not self.data_dir:
 			print("no 'data_dir' given. data won't be written to disk.")
 			return
 		
-		# if self.structure == "tree":
-			# collect children
 		for l in self.all_layers:
 			if l._is_group:
 				l._output["layers"] = [x._output for x in l if x in self.all_layers]
+		
 		# collect root layers
 		output = {
 			"name": self.file_name,
@@ -277,43 +320,21 @@ class PSDProcessor:
 			# "blend_mode": l._old_blend_mode,
 			# "global_position": l._global_position,
 		}
-		self.save_file(self.file_name, output)
-	
-	def save_file(self, file_name:str, data):
-		# local_path = self.data_dir + "/" + file_name + ".tres"
-		# path = util.DIR_RESOURCES + "/" + local_path
-		# directory = path.rsplit("/", 1)[0]
-		# util.create_directory(directory)
 		
-		json_text = json.dumps(data, indent=4)
-		tres_text = godot.TEMPLATE_TRES + json_text
+		# layer info
+		local_path = self.data_path(self.name, "tres")
+		tres_text = godot.TEMPLATE_TRES + json.dumps(output, indent=4)
+		save_string(local_path, tres_text)
 		
-		# with open(path, "w") as file:
-		# 	file.write(tres_text)
-		
-		self.save_string(tres_text, file_name, "tres")
-		
-		# godot script generator
+		# godot script
 		has_script, script = godot.generate_script(self.all_layers)
 		if has_script:
-			self.save_string(script, file_name.replace(" ", "_"), "gd")
-			# local_path = self.data_dir + "/" + file_name.replace(" ", "_") + ".gd"
-			# path = util.DIR_RESOURCES + "/" + local_path
-			# with open(path, "w", encoding='utf-8') as f:
-			# 	f.write(script)
-		
+			script_name = self.name.replace(" ", "_")
+			local_path = self.data_path(script_name, "gd")
+			save_string(local_path, script)
 	
-	def save_string(self, string:str, name, extension, loud:bool=True):
-		local_path = f"{self.data_dir}/{name}.{extension}"
-		path = f"{util.DIR_RESOURCES}/{local_path}"
-		directory = path.rsplit("/", 1)[0]
-		util.create_directory(directory)
-		
-		with open(path, "w", encoding="utf-8") as file:
-			file.write(string)
-		
-		if loud:
-			print("saved:", local_path)
+	def data_path(self, local_path, extension):
+		return f"{self.data_dir}/{local_path}.{extension}"
 	
 	def get_layer_path(self, layer) -> list:
 		path = []
@@ -336,14 +357,12 @@ class PSDProcessor:
 		local_path += l.name
 		local_path += "." + self.texture_extension
 		
-		# create directory.
-		path = util.DIR_RESOURCES + "/" + local_path
-		directory = path.rsplit("/", 1)[0]
-		assert directory.startswith(util.DIR_RESOURCES), "path must be local"
-		util.create_directory(directory)
-		
 		is_mask = "mask" in l._tags
 		scale = self.scale if not is_mask else self.mask_scale
+		
+		l._scale = scale
+		l._texture = f"res://{local_path}"
+		self.texture_paths.append(local_path)
 		
 		if self.update_image and not SKIP_IMAGES:
 			image = l.composite(l._clamped_bbox)
@@ -363,63 +382,58 @@ class PSDProcessor:
 			elif self.get("quantize"):
 				image = image.quantize(method=3)
 			
-			image.save(path, self.format, **self.extension_settings)
-			print("created texture:", local_path)
+			# generate polygon
+			if "poly" in l._tags:
+				import genpoly
+				poly_path = self.data_path(f"poly_{self.name}", "tscn")
+				points = genpoly.get_points(image, l._texture)# str(DIR_RESOURCES / local_path), l._texture)
+				save_string(poly_path, points)
 			
-		l._scale = scale
-		l._texture = "res://" + local_path
-		self.texture_paths.append(local_path)
+			# RGBA -> RGB
+			if self.format in ["JPEG"]:
+				new_image = Image.new("RGB", image.size, (255, 255, 255))
+				new_image.paste(image, mask=image.split()[3])
+				image = new_image
+			
+			save_image(local_path, image, self.format, self.extension_settings)
+
+def settings_changed(old, new):
+	if len(old) != len(new):
+		return True
+	for k in new:
+		if not k in old:
+			return True
+		if old[k] != new[k]:
+			return True
+	return False
+
+directory = DIR_RESOURCES / LOOK_IN
+
+if directory.exists():
+	for file in list(directory.rglob('*.psd')):
+		fname = file.stem
+		fextension = file.suffix
+		fpath = directory / file
 		
-		# generate polygon
-		if "poly" in l._tags:
-			import genpoly
-			points = genpoly.get_points(path, l._texture)
-			self.save_string(points, f"poly_{self.name}", "tscn")
-			print(points)
-
-
-d = f"{util.DIR_RESOURCES}/{LOOK_IN}"
-
-if os.path.exists(d):
-	for file in os.listdir(d):
-		if file.endswith(".psd"):
+		build_info_path = f"{LOOK_IN}/.lim_{fname}.json"
+		build_info = load_dict(build_info_path, {"modified": "", "settings":{}})
+		new_time = file_time(fpath)
+		
+		settings_path = f"{LOOK_IN}/{fname}.json"
+		settings = load_dict(settings_path, {})
+		
+		if FORCE_UPDATE or\
+			build_info["modified"] != new_time or\
+			settings_changed(build_info["settings"], settings):
 			
-			fname, fextension = file.rsplit(".", 1)
-			fpath = os.path.join(d, file)
-			
-			data_path = os.path.join(d, ".lim_" + fname + ".json")
-			old_data = util.load_data(data_path, {})
-			new_time = util.file_time(fpath)
-			
-			settings_path = os.path.join(d, fname + ".json")
-			settings = util.load_data(settings_path, {})
-			
-			if FORCE_UPDATE or not "modified" in old_data or old_data["modified"] != new_time:
-				settings["path"] = fpath
+				PSDProcessor(fpath, settings)
 				
-				PSDProcessor(settings).load()
-				
-				new_data = { "modified": new_time, "settings": settings }
-				util.save_data(new_data, data_path)
-			else:
-				print("already up to date:", fname)
-
-# s = {
-# # "path": "/home/tee/Documents/psds/Female Sprite by Sutemo.psd",
-# "path": "/home/tee/Documents/Krita/psds/door.psd",
-# "texture_dir": "textures_gui",
-# "data_dir": "textures_gui",
-# "seperator": "-",
-# # "origin": (0.5, 1.0)
-# }
-# s = {
-# # "path": "/home/tee/Documents/psds/Female Sprite by Sutemo.psd",
-# "path": "/home/tee/Documents/Krita/psds/items.psd",
-# "texture_dir": "textures_items/icon",
-# "data_dir": "textures_items/info",
-# "seperator": "/",
-# "structure": "solo",
-# "scale": 0.25
-# # "origin": (0.5, 1.0)
-# }
-# PSDProcessor(s).load()
+				new_data = {
+					"path": str(fpath),
+					"modified": new_time,
+					"settings": settings
+				}
+				save_dict(build_info_path, new_data)
+		
+		else:
+			print(f"already up to date: {fname}")

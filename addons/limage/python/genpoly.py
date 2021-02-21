@@ -5,31 +5,45 @@
 import numpy as np
 import cv2 as cv
 
-EXTRA_BORDER = 2
+EXTRA_BORDER = 4
 SIMPLIFY = 0.003
 
-def get_points(path:str, local_path:str) -> list:
-	im = cv.imread(path)
-	imgray = cv.cvtColor(im, cv.COLOR_BGR2GRAY)
+def get_points(pil_image, local_path) -> str:#path, local_path:str) -> list:
+	# im = cv.imread(path)
+	im = cv.cvtColor(np.array(pil_image), cv.COLOR_RGBA2BGRA)
+	# cv.imwrite('./test_result0.png', im)
 	
+	_, mask = cv.threshold(im[:, :, 3], 0, 255, cv.THRESH_BINARY)
+	
+	# imgray = cv.cvtColor(im, cv.COLOR_BGRA2GRAY)
+	
+	# cv.imwrite('./test_result1.png', im)
 	# cv.imwrite('./test_result2.png', imgray)
 	
-	ret, thresh = cv.threshold(imgray, 127, 255, 0)
-	contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-	cv.drawContours(imgray, contours, -1, (255,255,255), EXTRA_BORDER)
+	# cv.imwrite('./test_result1.png', mask)
+	
+	_, thresh = cv.threshold(mask, 127, 255, cv.THRESH_BINARY)
+	contours, hierarchy = cv.findContours(mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+	cv.drawContours(im, contours, -1, (0,0,0,255), EXTRA_BORDER)
 
+	# cv.imwrite('./test_result2.png', im)
+	
+	_, mask = cv.threshold(im[:, :, 3], 0, 255, cv.THRESH_BINARY)
+	
 	# , cv.RETR_TREE   cv.RETR_EXTERNAL
-	ret, thresh = cv.threshold(imgray, 127, 255, 0)
+	_, thresh = cv.threshold(mask, 127, 255, cv.THRESH_BINARY)
 	contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 	
 	if len(contours) == 0:
-		print("no contours ", path)
+		print("no contours ", local_path)
 		return None
 	
 	epsilon = SIMPLIFY * cv.arcLength(contours[0], True)
 	approx = cv.approxPolyDP(contours[0], epsilon, True)
-	cv.drawContours(im, [approx], -1, (0,255,0), 1)
-
+	cv.drawContours(im, [approx], -1, (0,255,0,255), 2)
+	
+	# cv.imwrite('./test_result3.png', im)
+	
 	points = ""
 	uvs = ""
 	for i in range(len(approx)):

@@ -35,6 +35,7 @@ margin_left = 338.0
 margin_right = 672.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
+disabled = true
 text = "force update"
 
 [node name="skip_images" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
@@ -42,6 +43,7 @@ margin_left = 676.0
 margin_right = 1010.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
+disabled = true
 text = "skip images"
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]

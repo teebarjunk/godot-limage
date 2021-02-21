@@ -1,0 +1,49 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/limage/Limage.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+data = {
+    "name": "palm tree",
+    "path": [],
+    "tags": {},
+    "visible": true,
+    "opacity": 255,
+    "size": {
+        "x": 800,
+        "y": 600
+    },
+    "origin": {
+        "x": 400.0,
+        "y": 300.0
+    },
+    "layers": [
+        {
+            "name": "tree",
+            "path": [
+                "tree"
+            ],
+            "tags": {
+                "poly": true
+            },
+            "visible": true,
+            "opacity": 255,
+            "blend_mode": "normal",
+            "global_position": {
+                "x": -78.75,
+                "y": -147.0
+            },
+            "size": {
+                "x": 203.0,
+                "y": 310.09999999999997
+            },
+            "origin": {
+                "x": -101.5,
+                "y": -155.04999999999998
+            },
+            "scale": 0.7,
+            "texture": "res://textures/palm tree/tree.png"
+        }
+    ]
+}

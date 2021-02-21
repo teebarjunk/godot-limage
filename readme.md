@@ -1,5 +1,7 @@
 
-# limage v0.1
+# limage v0.2
+
+[changes](#changes)
 
 **WARNING: requires python to be installed**
 
@@ -18,6 +20,11 @@ draw origins + spawn points | to make life easier
 auto generate convenient code:
 
 ![layers2](./readme_images/layers2.png)
+
+auto polygon scene generator (WIP)
+
+![polygons](./readme_images/polygons.png)
+
 
 ## features
 
@@ -43,7 +50,6 @@ auto generate convenient code:
 
 ```
 pip3 install psd-tools
-
 ```
 - create a **layered_images** folder in godot. *"res://layered_images"*.
 - add .psd files. (krita and gimp can export .psd)
@@ -127,7 +133,7 @@ so next to "*layered_images/my_picture* **.psd**" include "*layered_images/my_pi
 	"quality": 80
 },
 
-"JPG": {
+"JPEG": {
 	"optimize": True,
 	"quality": 80
 }
@@ -152,3 +158,26 @@ you can then replace **LimageNode.gd** with it.
 godot might complain when these scripts are first generated.
 
 they work in editor, but they might display some wrong info in the panel.
+
+
+## updates
+
+**0.2**
+	- saving + loading should work better on Windows.
+	- fixed "merge" group tag still generating child textures.
+	- fixed JPEG error because of no alpha channel.
+	- fixed polygon generation not working with some image formats.
+	- if settings file is changed, image will be rebuilt.
+
+
+## solutions
+
+### webp
+
+if webp exporting isn't working, try installing, reinstalling, or updating [PILLOW](https://pillow.readthedocs.io/en/stable/installation.html), and/or libwebp:
+
+on ubuntu:
+
+```
+sudo apt-get install -y libwebp-dev
+```
