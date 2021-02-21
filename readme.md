@@ -30,7 +30,7 @@ Auto generate convenient code.
 
 Tell Godot what kind of node | you want the layer to be.
 :-:|:-:
-![node1](./readme_images/node1.png) | ![node2](./readme_images/node2.png)
+![node1](./readme_images/node.png) | ![node2](./readme_images/node2.png)
 
 Auto polygon scene generator (WIP)
 
