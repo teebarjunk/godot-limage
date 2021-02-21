@@ -6,6 +6,7 @@ var dock
 
 func _enter_tree():
 	dock = Dock.instance()
+	dock.plugin = self
 	# Add the main panel to the editor's main viewport.
 	get_editor_interface().get_editor_viewport().add_child(dock)
 	# Hide the main panel. Very much required.

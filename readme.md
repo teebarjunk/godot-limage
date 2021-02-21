@@ -1,7 +1,14 @@
 
-# limage v0.2
+# limage v0.2.1
 
+[features](#features)
+[getting started](#getting-started)
+[tags](#tags)
+[settings](#settings)
+[todo](#todo)
+[customizer](#customizer)
 [changes](#changes)
+[solutions](#solutions)
 
 **WARNING: requires python to be installed**
 
@@ -74,6 +81,10 @@ every time you double click **force_update** it will update. useful if you made 
 ## tags
 
 in your art program add tags between []: "*layer_name [tag_1 tag2 tag-3]*"
+
+you can apply a tag to all child layers with (), and all descendants with (()). "*buttons (button)*"
+
+tags can have values: "*background [parallax=10]*" which you can then use in godot with *limage.get_layer("background").tags.get("parallax")*.
 
 - **x**: completely ignore layer. (wont export image or layer info)
 - **visible**: will make layer visible, regardless of it's state in the psd.
@@ -160,7 +171,10 @@ godot might complain when these scripts are first generated.
 they work in editor, but they might display some wrong info in the panel.
 
 
-## updates
+## changes
+
+**0.2.1**
+- editor should reload files properly now.
 
 **0.2**
 - saving + loading should work better on Windows.
