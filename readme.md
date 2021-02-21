@@ -163,11 +163,11 @@ they work in editor, but they might display some wrong info in the panel.
 ## updates
 
 **0.2**
-	- saving + loading should work better on Windows.
-	- fixed "merge" group tag still generating child textures.
-	- fixed JPEG error because of no alpha channel.
-	- fixed polygon generation not working with some image formats.
-	- if settings file is changed, image will be rebuilt.
+- saving + loading should work better on Windows.
+- fixed "merge" group tag still generating child textures.
+- fixed JPEG error because of no alpha channel.
+- fixed polygon generation not working with some image formats.
+- if settings file is changed, image will be rebuilt.
 
 
 ## solutions
