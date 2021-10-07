@@ -3,7 +3,7 @@
 export.cfg
 export_presets.cfg
 
-/limages
+limages/
 
 # Imported translations (automatically generated from CSV files)
 *.translation
