@@ -1,196 +1,146 @@
 tool
-extends Resource
-class_name Limage
+class_name Limage, "res://addons/limage/layer.png" extends Resource
 
-export(Dictionary) var data:Dictionary # everything is stored in a dict, so trans to json is easier.
+export(String, FILE, GLOBAL, "*.psd,*.kra,*.ora") var file_path:String = ""
+export var file_modified_time:String = ""
 
-var name:String setget, get_name
-var size:Vector2 setget, get_size
-var layers:Array setget, get_layers
+var format:String = "PNG" setget set_format
 
-func get_name() -> String: return data.name
-func get_size() -> Vector2: return _v(data.size)
-func get_layers(l:Dictionary=data): return l.get("layers", [])
+# format: PNG
+var png_optimize:bool = true
+# format: WEBP
+var webp_lossless:bool = true
+var webp_method:int = 3
+var webp_quality:int = 80
+# format: JPEG
+var jpeg_optimize:bool = true
+var jpeg_quality:int = 75
+# format: TGA (TODO)
+# format: BMP (TODO)
 
-func get_varname(d:Dictionary=data) -> String:
-	return PoolStringArray(d.path).join("_").replace(" ", "_").replace("-", "_")
+# quantize
+var quantize_enabled:bool = false
+var quantize_method:int = 3
+var quantize_colors:int = 255
 
-func get_layer(n:String, d:Dictionary=data):
-	for part in n.split("/"):
-		d = _get_layer(d, part)
-		if d == null:
-			print("LIMAGE: couldn't find %s in %s" % [part, n])
-			return null
-	return d
+var scale:float = 1.0
+var padding:int = 1
+var origin:Vector2 = Vector2(.5, 1.0)
+var seperator:String = "-"
 
-func _get_layer(d:Dictionary, n:String):
-	for l in d.layers:
-		if l.name == n:
-			return l
-	return null
+# texture file settings
+var texture_storage:int = ImageTexture.STORAGE_COMPRESS_LOSSLESS
+var texture_lossy_quality:float = 0.7
+var texture_flags:int = Texture.FLAGS_DEFAULT
 
-func all_layers_with_tag(tag:String, d:Dictionary=data) -> Array:
-	var layers = all_layers(d)
-	for i in range(len(layers)-1, -1, -1):
-		if not tag in layers[i].tags:
-			layers.remove(i)
-	return layers
+var debug_print:bool = false
+var debug_skip_images:bool = false
+var debug_binary_scene:bool = false # store as smaller ".scn" instead of larger ".tscn" 
+var debug_remove_image_files:bool = true
 
-func all_layers(d:Dictionary=data) -> Array:
-	return _all_layers(d, [])
+var base_dir:String
 
-func _all_layers(layer, out:Array):
-	out.append(layer)
-	if "layers" in layer:
-		for child in layer.layers:
-			_all_layers(child, out)
+export(Dictionary) var data:Dictionary = {}
+
+func set_format(f):
+	format = f
+	property_list_changed_notify()
+
+func _get_property_list():
+	var out:Array = []
+	
+	out.append_array([
+		{name="Texture",type=TYPE_NIL,usage=PROPERTY_USAGE_GROUP,hint_string="texture_"},
+		{name="format",type=TYPE_STRING,value="PNG",hint=PROPERTY_HINT_ENUM,hint_string="PNG,WEBP,JPEG,TGA,BMP"},
+		{name="scale",type=TYPE_REAL,hint=PROPERTY_HINT_RANGE,hint_string="0.125,4.0"},
+		{name="padding",type=TYPE_INT,hint=PROPERTY_HINT_RANGE,hint_string="0,4"},
+		{name="origin",type=TYPE_VECTOR2,value=Vector2(0.5,1.0)},
+		{name="seperator",type=TYPE_STRING,hint=PROPERTY_HINT_ENUM,hint_string="-,/"}])
+	
+	out.append_array([
+		{name="Quantize",type=TYPE_NIL,usage=PROPERTY_USAGE_GROUP,hint_string="quantize_"},
+		{name="quantize_enabled",type=TYPE_BOOL,hint=""},
+		{name="quantize_method",type=TYPE_INT,hint=PROPERTY_HINT_ENUM,hint_string="mediancut,maxcoverage,fastoctree,libimagequant"},
+		{name="quantize_colors",type=TYPE_INT,hint=PROPERTY_HINT_RANGE,hint_string="2,256"},
+	])
+	
+	match format:
+		"PNG": out.append_array([
+			{name="PNG",type=TYPE_NIL,usage=PROPERTY_USAGE_GROUP,hint_string="png_"},
+			{name="png_optimize",type=TYPE_BOOL,value=true}])
+		
+		"WEBP": out.append_array([
+			{name="WEBP",type=TYPE_NIL,usage=PROPERTY_USAGE_GROUP,hint_string="webp_"},
+			{name="webp_lossless",type=TYPE_BOOL,value=true},
+			{name="webp_method",type=TYPE_INT,value=3,hint=PROPERTY_HINT_ENUM,hint_string="0 fast & low quality,1,2,3,4,5,6 slow & high quality"},
+			{name="webp_quality",type=TYPE_INT,value=80,hint=PROPERTY_HINT_RANGE,hint_string="0,100"}])
+		
+		"JPEG": out.append_array([
+			{name="JPEG",type=TYPE_NIL,usage=PROPERTY_USAGE_GROUP,hint_string="jpeg_"},
+			{name="jpeg_optimize",type=TYPE_BOOL,value=true},
+			{name="jpeg_quality",type=TYPE_INT,value=75,hint=PROPERTY_HINT_RANGE,hint_string="0,95"}])
+	
+	out.append_array([
+		{name="Texture",type=TYPE_NIL,usage=PROPERTY_USAGE_GROUP,hint_string="texture_"},
+		{name="texture_storage",type=TYPE_INT,hint=PROPERTY_HINT_ENUM,hint_string="Uncompressed,Compress Lossy,Compress Lossless"},
+		{name="texture_lossy_quality",type=TYPE_REAL,hint=PROPERTY_HINT_RANGE,hint_string="0.0,1.0"},
+		{name="texture_flags",type=TYPE_INT,hint=PROPERTY_HINT_FLAGS,hint_string="Mipmaps,Repeat,Filter,Anisotropic,sRGB,Mirrored Repeat"},
+	])
+	
+	out.append_array([
+		{name="Debug",type=TYPE_NIL,usage=PROPERTY_USAGE_GROUP,hint_string="debug_"},
+		{name="debug_print",type=TYPE_BOOL,usage=PROPERTY_USAGE_DEFAULT},
+		{name="debug_skip_images",type=TYPE_BOOL,usage=PROPERTY_USAGE_DEFAULT},
+		{name="debug_binary_scene",type=TYPE_BOOL,usage=PROPERTY_USAGE_DEFAULT},
+		{name="debug_remove_image_files",type=TYPE_BOOL,usage=PROPERTY_USAGE_DEFAULT},
+	])
+	
 	return out
 
-func set_layer_as_cursor(name:String):
-	var layer = get_layer(name)
-	if layer:
-		if "texture" in layer:
-			var tex = load(layer.texture)
-			var origin = -_v(layer.origin)
-			Input.set_custom_mouse_cursor(tex, Input.CURSOR_ARROW, -origin)
-		else:
-			prints(layer.name, "has no texture")
-	else:
-		prints("no layer ", name)
+func get_fname() -> String:
+	return file_path.get_file().rsplit(".", true, 1)[0]
 
-func get_node_type(layer:Dictionary, _as_controls:bool):
-	if "node" in layer.tags:
-		if ClassDB.class_exists(layer.tags.node):
-			return ClassDB.instance(layer.tags.node)
-		else:
-			push_warning("No node: %s" % layer.tags.node)
+func get_output_dir() -> String:
+	return base_dir.plus_file(get_fname())
+
+func get_scene_path(file:String):
+	return get_output_dir().plus_file(file + (".scn" if debug_binary_scene else ".tscn"))
+
+func get_scene_dir_path(dir:String, file:String):
+	var out = get_output_dir().plus_file(dir)
+	var d:Directory = Directory.new()
+	if not d.dir_exists(out):
+		d.make_dir(out)
+	return out.plus_file(file + (".scn" if debug_binary_scene else ".tscn"))
+
+func get_scene_name() -> String:
+	return get_scene_path(get_fname())
+
+func get_child_names(layer:Dictionary) -> PoolStringArray:
+	var out = PoolStringArray()
+	if has_layers(layer):
+		for l in layer.layers:
+			out.append(l.name)
+	return out
+
+func get_child(layer:Dictionary, name:String) -> Dictionary:
+	if has_layers(layer):
+		for child in layer.layers:
+			if child.name == name:
+				return child
+	return {}
+
+func has_layers(layer:Dictionary) -> bool:
+	return "layers" in layer and layer.layers
 	
-	var node:Node
-	if "texture" in layer or "options" in layer.tags:
-		node = (TextureRect if _as_controls else Sprite).new()
-	else:
-		node = (Control if _as_controls else Node2D).new()
-	
-	if _as_controls:
-		(node as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
-	
-	if "options" in layer.tags:
-		node.set_script(load("res://addons/limage/LimageOption.gd"))
-	elif "button" in layer.tags:
-		node.set_script(load("res://addons/limage/LimageButton.gd"))
-	
-	return node
+func on_all_layers(obj:Object, fname:String):
+	var fr = funcref(obj, fname)
+	for layer in _get_all_layers(data.root, []):
+		fr.call_func(layer)
 
-func get_layer_names(l:Dictionary=data) -> PoolStringArray:
-	var out = []
-	var layers = get_layers()
-	for l in layers:
-		out.append(l.name)
-	return PoolStringArray(out)
-
-func apply_name(n:Node, l:Dictionary=data):
-	n.name = l.get("name", n.name)
-
-func apply_visible(n:Node, l:Dictionary=data):
-	if "visible" in n:
-		n.visible = l.visible
-
-func apply_opacity(n:Node, l:Dictionary=data):
-	if "color" in n:
-		n.color.a = l.opacity / 255.0
-	elif "opacity" in n: # Sprite3D
-		n.opacity = l.opacity / 255.0
-	elif "modulate" in n: # Sprite2D, TextureRect
-		n.modulate.a = l.opacity / 255.0
-
-func apply_blend_mode(n:Node, l:Dictionary=data):
-	if "blend_mode" in n:
-		n.blend_mode = l.blend_mode
-
-func apply_texture(n:Node, d:Dictionary=data):
-	if "texture" in n and "texture" in d:
-		n.texture = load(d.texture)
-		if "centered" in n:
-			n.centered = false
-#		elif "rect_pivot_offset" in n:
-#			n.rect_pivot_offset = -_v(d.origin)
-
-func apply_position(n:Node, d:Dictionary=data):
-	if "position" in n:
-		n.position = _v(d.position)
-		
-		if "offset" in n and not n is Light2D:
-			n.offset = -_v(d.origin)
-	
-	elif "rect_position" in n:
-		n.rect_position = _v(d.position) + _v(d.origin)
-		n.rect_pivot_offset = -_v(d.origin)
-	
-	else:
-		prints("couldn't set position", n, d.name)
-
-func update_node(top_node:Node, _as_contols:bool=false, _print:bool=true):
-	_update_node(top_node, top_node, data, 0, _as_contols, _print)
-
-func _update_node(top_node:Node, node:Node, info:Dictionary, depth:int=0, _as_controls:bool=false, _print:bool=true):
-	apply_name(node, info)
-	
-	if "layer_info" in node:
-		node.layer_info = info
-	
-	if _print:
-		print("\t".repeat(depth), node.name)
-	
-	apply_visible(node, info)
-	apply_opacity(node, info)
-	
-	if "options" in info.tags:
-		var default = get_default_layer(info)
-		node.option = default.name
-		apply_texture(node, default)
-		apply_position(node, default)
-	
-	else:
-		# update settings
-		if node != top_node:
-			apply_position(node, info)
-			apply_texture(node, info)
-		
-		# create and/or update child layers
-		if "layers" in info:
-			for child_info in info.layers:
-				if "toggles" in info.tags and not child_info.visible:
-					continue
-				
-				var child = node.get_node_or_null(child_info.name)
-				# create new
-				if child == null:
-					child = get_node_type(child_info, _as_controls)
-					node.add_child(child)
-					if top_node.owner == null:
-						child.set_owner(top_node)
-					else:
-						child.set_owner(top_node.owner)
-				
-				_update_node(top_node, child, child_info, depth+1, _as_controls, _print)
-		
-		if "button" in info.tags:
-			node._update_state()
-
-# returns first visible layer, otherwise returns first layer
-func get_default_layer(d:Dictionary=data) -> Dictionary:
-	for l in d.layers:
-		if l.visible:
-			return l
-	return d.layers[0] 
-
-# recursively passes every layer through the given function
-func call_on_descendants(fr:FuncRef, args:Array=[], d:Dictionary=data):
-	if "layers" in d:
-		for child in d["layers"]:
-			fr.call_func(child, args)
-			call_on_descendants(fr, args, child)
-
-func _v(d:Dictionary) -> Vector2:
-	return Vector2(d.x, d.y)
-
+func _get_all_layers(d:Dictionary, out:Array):
+	if has_layers(d):
+		for l in d.layers:
+			out.append(l)
+			_get_all_layers(l, out)
+	return out

@@ -9,45 +9,45 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "LIButton",
+"language": "GDScript",
+"path": "res://addons/limage/nodes/LIButton.gd"
+}, {
+"base": "LimageNode",
+"class": "LIScene",
+"language": "GDScript",
+"path": "res://addons/limage/nodes/LIScene.gd"
+}, {
 "base": "Resource",
 "class": "Limage",
 "language": "GDScript",
 "path": "res://addons/limage/Limage.gd"
 }, {
-"base": "Node",
-"class": "LimageButton",
-"language": "GDScript",
-"path": "res://addons/limage/LimageButton.gd"
-}, {
-"base": "Node",
+"base": "Node2D",
 "class": "LimageNode",
 "language": "GDScript",
 "path": "res://addons/limage/LimageNode.gd"
-}, {
-"base": "Node",
-"class": "LimageOption",
-"language": "GDScript",
-"path": "res://addons/limage/LimageOption.gd"
 } ]
 _global_script_class_icons={
-"Limage": "",
-"LimageButton": "",
-"LimageNode": "",
-"LimageOption": ""
+"LIButton": "",
+"LIScene": "",
+"Limage": "res://addons/limage/layer.png",
+"LimageNode": "res://addons/limage/layer.png"
 }
 
 [application]
 
-config/name="Limage"
+config/name="limage-2"
 config/icon="res://icon.png"
-
-[display]
-
-window/size/width=800
 
 [editor_plugins]
 
-enabled=PoolStringArray( "limage" )
+enabled=PoolStringArray( "res://addons/limage/plugin.cfg" )
+
+[physics]
+
+common/enable_pause_aware_picking=true
 
 [rendering]
 
