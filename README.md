@@ -15,7 +15,7 @@ Add origins + spawn points | to make life easier.
 :-:|:-:
 ![points1](./README/points1.png) | ![points2](./README/points2.png)
 
-Limage auto generates convenient code.
+Auto code generation, for a convenient inspector.
 
 ![layers2](./README/layers2.png)
 
@@ -25,6 +25,8 @@ Tell Godot what kind of node | you want the layer to be.
 
 # Features
 **Disclaimer:** Requires Python to be installed. Not all features work the same across all file formats, but I'm working on that.
+
+![import_panel](./README/import_panel.png)
 
 - Supports generating as `png` `webp` `jpeg` with tweakable settings for each.
 - Scale options to shrink (or grow) all textures before importing.
