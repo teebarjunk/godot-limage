@@ -1,12 +1,12 @@
 tool
 extends EditorPlugin
 
-const LimageImporter = preload("res://addons/limage/LimageImporter.gd")
 const Icon = preload("res://addons/limage/layer.png")
-var limage_importer = LimageImporter.new(self)
-
 func get_plugin_icon(): return Icon
 func get_plugin_name(): return "Limage"
+
+const LimageImporter = preload("res://addons/limage/LimageImporter.gd")
+var limage_importer = LimageImporter.new(self)
 
 func _enter_tree():
 	add_custom_type("Limage", "Resource", Limage, Icon)

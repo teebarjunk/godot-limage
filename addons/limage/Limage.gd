@@ -6,6 +6,8 @@ export var file_modified_time:String = ""
 
 var format:String = "PNG" setget set_format
 
+var layers_as_scenes:bool = false
+
 # format: PNG
 var png_optimize:bool = true
 # format: WEBP
@@ -52,6 +54,7 @@ func _get_property_list():
 	out.append_array([
 		{name="Texture",type=TYPE_NIL,usage=PROPERTY_USAGE_GROUP,hint_string="texture_"},
 		{name="format",type=TYPE_STRING,value="PNG",hint=PROPERTY_HINT_ENUM,hint_string="PNG,WEBP,JPEG,TGA,BMP"},
+		{name="layers_as_scenes",type=TYPE_BOOL,value=false},
 		{name="scale",type=TYPE_REAL,hint=PROPERTY_HINT_RANGE,hint_string="0.125,4.0"},
 		{name="padding",type=TYPE_INT,hint=PROPERTY_HINT_RANGE,hint_string="0,4"},
 		{name="origin",type=TYPE_VECTOR2,value=Vector2(0.5,1.0)},

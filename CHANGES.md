@@ -1,5 +1,8 @@
 # Changes
 
+0.4
+- Added export option `layers_as_scenes` saves a unique scene for each main layer.
+
 0.3
 - `kra` support added.
 - Lot's of rewriting. Works more in line with Godot now.

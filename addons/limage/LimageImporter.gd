@@ -17,9 +17,11 @@ func get_import_options(i):
 	return [
 		{name="format",default_value="PNG",type=TYPE_STRING,property_hint=PROPERTY_HINT_ENUM,hint_string="PNG,WEBP,JPEG,TGA,BMP"},
 		
+		{name="layers_as_scenes",type=TYPE_BOOL,default_value=false},
+		
 		{name="scale",default_value=1.0,type=TYPE_REAL,property_hint=PROPERTY_HINT_RANGE,hint_string="0.125,4.0"},
 		{name="padding",default_value=1,type=TYPE_INT,property_hint=PROPERTY_HINT_RANGE,hint_string="0,4"},
-		{name="origin",default_value=Vector2(0.5,1.0),type=TYPE_VECTOR2},
+		{name="origin",default_value=Vector2(0.5,0.5),type=TYPE_VECTOR2},
 		{name="seperator",default_value="-",type=TYPE_STRING,property_hint=PROPERTY_HINT_ENUM,hint_string="-,/"},
 		
 		{name="quantize/enabled",default_value=false,type=TYPE_BOOL},

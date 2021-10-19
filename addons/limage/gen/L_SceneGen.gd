@@ -17,27 +17,39 @@ func _update(path):
 	pass
 
 func _create(path):
-	var scene:Node2D
-	var script_path = li.get_output_dir().plus_file(li.get_fname() + ".gd")
-	if File.new().file_exists(script_path):
-		scene = load(script_path).new()
+	if li.layers_as_scenes:
+		print(len(li.data.root.layers))
+		for i in range(len(li.data.root.layers)-1, -1, -1):
+			var scene:Node = _create_layer(null, null, li.data.root.layers[i])
+			var scene_path:String = li.get_scene_path(li.data.root.layers[i].name)
+			prints(i, scene_path)
+			var packed_scene = PackedScene.new()
+			if packed_scene.pack(scene) == OK:
+				if not ResourceSaver.save(scene_path, packed_scene) == OK:
+					push_error("An error occurred while saving the scene to disk.")
+	
 	else:
-		scene = Node2D.new()
-	
-	scene.set_name(li.get_fname())
-	
-	for i in range(len(li.data.root.layers)-1,-1,-1):
-		_create_layer(scene, scene, li.data.root.layers[i])
-	
-	# create points
-	_create_points(scene, scene, li.data.root)
-	
-	var packed_scene = PackedScene.new()
-	if packed_scene.pack(scene) == OK:
-		if ResourceSaver.save(path, packed_scene) == OK:
-			return
-	push_error("An error occurred while saving the scene to disk.")
-	return
+		var scene:Node2D
+		var script_path = li.get_output_dir().plus_file(li.get_fname() + ".gd")
+		if File.new().file_exists(script_path):
+			scene = load(script_path).new()
+		else:
+			scene = Node2D.new()
+		
+		scene.set_name(li.get_fname())
+		
+		for i in range(len(li.data.root.layers)-1, -1, -1):
+			_create_layer(scene, scene, li.data.root.layers[i])
+		
+		# create points
+		_create_points(scene, scene, li.data.root)
+		
+		var packed_scene = PackedScene.new()
+		if packed_scene.pack(scene) == OK:
+			if ResourceSaver.save(path, packed_scene) == OK:
+				return
+		push_error("An error occurred while saving the scene to disk.")
+		return
 
 func _create_points(root:Node, parent:Node, data:Dictionary):
 	if "points" in data:
@@ -104,12 +116,12 @@ func _create_layer(root:Node, parent:Node, data:Dictionary):
 		layer = create_sprite(root, parent, data)
 	else:
 		layer = create_node(data)
-		parent.add_child(layer)
-		layer.set_owner(root)
+		if parent:
+			parent.add_child(layer)
+			layer.set_owner(root)
 	
 #	layer.set_visible(data.visible)
 #	layer.set_modulate(Color(1.0, 1.0, 1.0, data.opacity))
-	
 	
 	layer.set_meta("limage", data)
 	
@@ -123,3 +135,5 @@ func _create_layer(root:Node, parent:Node, data:Dictionary):
 		else:
 			for i in range(len(data.layers)-1, -1, -1):
 				_create_layer(root, layer, data.layers[i])
+	
+	return layer
